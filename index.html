@@ -271,7 +271,8 @@
       const grilla = document.getElementById("grilla-productos"); grilla.innerHTML = "";
       if (items.length === 0) { grilla.innerHTML = `<p class="text-gray-500 text-center col-span-full py-10">No se encontraron resultados.</p>`; return; }
       
-      items.forEach(prod => {
+      // Agregamos el 'index' para saber en qué número de tarjeta estamos
+      items.forEach((prod, index) => {
         const tarjeta = document.createElement('div');
         tarjeta.className = "fade-in-up bg-white rounded-xl shadow-sm hover:shadow-md transition cursor-pointer group flex flex-col overflow-hidden border border-gray-100";
         tarjeta.onclick = () => window.abrirDetalle(prod.id);
@@ -280,10 +281,16 @@
         const indicadorMapa = (prod.lat && prod.lng) ? `<div class="text-gray-400 text-xs mt-1 flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Ver en mapa</div>` : '';
         const precioMostrado = prod.precio ? `$${prod.precio}` : 'Consultar';
 
+        // LÓGICA HÍBRIDA DE VELOCIDAD: 
+        // Si es una de las primeras 6 tarjetas, máxima prioridad. Si es la 7 en adelante, carga diferida (lazy).
+        const atributosImagen = index < 6 
+          ? 'fetchpriority="high"' 
+          : 'loading="lazy"';
+
         tarjeta.innerHTML = `
           <div class="w-full aspect-[4/3] relative overflow-hidden bg-gray-100 p-2">
-            <!-- REEMPLAZO IMPORTANTE: Fetchpriority en lugar de Loading Lazy -->
-            <img src="${prod.imagen}" fetchpriority="high" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-500">
+            <!-- Aplicamos la lógica híbrida aquí -->
+            <img src="${prod.imagen}" ${atributosImagen} class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-500">
             ${tieneGaleria}
           </div>
           <div class="pt-4 pb-2 px-1 flex justify-between items-start">
