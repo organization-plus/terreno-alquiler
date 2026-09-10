@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestión Inmobiliaria</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fondoOscuro: '#0f172a',
+            fondoMedio: '#1e293b', 
+            fondoTarjeta: '#334155',
+            acento: '#3b82f6',
+            acentoOscuro: '#2563eb',
+            textoClaro: '#f8fafc',
+            textoGris: '#94a3b8'
+          },
+          fontFamily: {
+            sans: ['"Inter"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .menu-activo { color: #3b82f6 !important; border-bottom: 2px solid #3b82f6; padding-bottom: 2px; }
+    html { scroll-behavior: smooth; }
+    .fade-in-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+    .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+    .animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+
+<body class="bg-gradient-to-b from-fondoOscuro via-fondoOscuro to-fondoMedio text-textoClaro font-sans min-h-screen flex flex-col antialiased">
+  
+  <div class="fixed top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-acento opacity-[0.03] blur-[120px] rounded-full pointer-events-none z-0"></div>
+  <div class="fixed bottom-[-10%] right-[-5%] w-[30rem] h-[30rem] bg-acento opacity-[0.04] blur-[100px] rounded-full pointer-events-none z-0"></div>
+
+  <!-- Botón Flotante WhatsApp -->
+  <a href="https://wa.me/543755641575" target="_blank" class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-2xl z-50 transition transform hover:scale-110">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+
+  <nav class="bg-fondoOscuro py-4 px-6 md:px-12 flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 border-b border-gray-800 shadow-xl">
+    <div class="text-2xl font-bold tracking-wider text-textoClaro mb-4 md:mb-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+      Gestión <span class="text-acento font-light">Inmuebles</span>
+    </div>
+    <div class="flex gap-5">
+      <a href="https://wa.me/543755641575" target="_blank" class="text-textoClaro hover:text-green-400 text-xl transition flex items-center gap-2">
+        <i class="fa-brands fa-whatsapp"></i> <span class="text-sm">Consultas</span>
+      </a>
+    </div>
+  </nav>
+
+  <header class="flex flex-col md:flex-row min-h-[50vh] md:min-h-[60vh] border-b border-gray-800">
+    <div class="md:w-1/2 flex flex-col justify-center p-10 md:p-20 order-2 md:order-1 relative z-10">
+      <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
+        Encontrá tu<br><span class="text-acento font-light">lugar ideal</span>
+      </h1>
+      <p class="text-textoGris leading-relaxed max-w-md text-base">
+        Especialistas en la venta de terrenos, casas y alquileres temporarios o permanentes. Explorá nuestras propiedades y contactanos para asesoramiento personalizado.
+      </p>
+    </div>
+    
+    <div class="md:w-1/2 order-1 md:order-2 h-64 md:h-auto relative flex items-center justify-center overflow-hidden bg-fondoTarjeta">
+      <div class="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-fondoOscuro to-transparent z-10"></div>
+      <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=80" alt="Inmobiliaria Portada" class="w-full h-full object-cover opacity-60">
+    </div>
+  </header>
+
+  <main id="seccion-productos" class="py-20 px-6 md:px-12">
+    
+    <div class="text-center mb-10">
+      <h2 id="titulo-categoria" class="text-4xl font-bold text-textoClaro capitalize mb-4">
+        Todas las propiedades
+      </h2>
+      <div class="w-24 h-1 bg-acento mx-auto mb-10"></div>
+
+      <div class="max-w-md mx-auto mb-12 relative">
+        <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por barrio, tipo, precio..." class="w-full bg-fondoTarjeta text-textoClaro border border-gray-700 rounded-sm py-3 px-4 pl-12 focus:outline-none focus:border-acento transition shadow-lg font-light text-sm placeholder-gray-500">
+        <i class="fa-solid fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-textoGris"></i>
+      </div>
+
+      <div id="menu-categorias" class="flex flex-wrap justify-center gap-4 md:gap-8 border-b border-gray-800 pb-4"></div>
+    </div>
+
+    <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
+      <p class="text-center w-full col-span-full py-10 text-textoGris"><i class="fa-solid fa-spinner fa-spin text-acento text-2xl mb-2"></i><br>Cargando propiedades...</p>
+    </div>
+
+  </main>
+
+  <footer class="bg-fondoOscuro py-8 text-center border-t border-gray-800 mt-auto">
+    <p class="text-textoGris text-xs uppercase tracking-widest">&copy; Gestión Inmobiliaria</p>
+  </footer>
+
+  <div id="modal-producto" class="fixed inset-0 bg-black bg-opacity-95 hidden flex-col items-center justify-center p-4 z-50 transition-opacity backdrop-blur-sm overflow-y-auto"></div>
+
+  <!-- Modal de Anuncio -->
+  <div id="modal-anuncio" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-[60] transition-opacity backdrop-blur-md">
+    <div class="bg-fondoTarjeta w-full max-w-lg mx-auto rounded-md overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-acento/30 animate-fade-in-up">
+      <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-20 bg-cover bg-center"></div>
+      <div class="relative z-10 p-8 flex flex-col items-center text-center h-full justify-center">
+        <button onclick="cerrarAnuncio()" class="absolute top-3 right-3 text-textoGris hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+        <h3 id="anuncio-titulo" class="text-3xl font-bold text-acento mb-4 tracking-wide leading-tight"></h3>
+        <p id="anuncio-texto" class="text-textoClaro text-base md:text-lg leading-relaxed whitespace-pre-wrap mb-2"></p>
+        <button onclick="cerrarAnuncio()" class="mt-8 bg-acento hover:bg-acentoOscuro text-white font-bold py-3 px-8 rounded transition uppercase tracking-widest text-xs shadow-lg">Entendido</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // NUEVA CONFIGURACIÓN: TIO JUANJO
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHEemfeOAbqn8zwcJIQMgPCWoj-rieWjo",
+      authDomain: "tio-juanjo.firebaseapp.com",
+      projectId: "tio-juanjo",
+      storageBucket: "tio-juanjo.firebasestorage.app",
+      messagingSenderId: "465060896072",
+      appId: "1:465060896072:web:d96cafe70ef8afd56e677d",
+      measurementId: "G-7W0HGSHTWG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let productos = [];
+    let categorias = [];
+    window.fotosModal = [];
+    window.indiceModalActual = 0;
+
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach(entrada => { if (entrada.isIntersecting) { entrada.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+
+    async function cargarDatos() {
+      const catSnap = await getDocs(collection(db, "categorias_inmuebles"));
+      catSnap.forEach((doc) => { categorias.push({ id: doc.id, ...doc.data() }); });
+      
+      const prodSnap = await getDocs(collection(db, "inmuebles"));
+      prodSnap.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
+      
+      renderizarMenu(); filtrar('todos'); cargarAnuncio();
+    }
+
+    async function cargarAnuncio() {
+      if (sessionStorage.getItem("anuncioVisto_inm")) return;
+      try {
+        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.activo) {
+            document.getElementById('anuncio-titulo').innerText = data.titulo;
+            document.getElementById('anuncio-texto').innerText = data.texto;
+            if (data.imagen) document.getElementById('anuncio-bg').style.backgroundImage = `url('${data.imagen}')`;
+            document.getElementById('modal-anuncio').classList.remove('hidden');
+            document.getElementById('modal-anuncio').classList.add('flex');
+          }
+        }
+      } catch (e) {}
+    }
+
+    window.cerrarAnuncio = function() {
+      document.getElementById('modal-anuncio').classList.add('hidden');
+      document.getElementById('modal-anuncio').classList.remove('flex');
+      sessionStorage.setItem("anuncioVisto_inm", "true");
+    }
+
+    function renderizarMenu() {
+      const menu = document.getElementById("menu-categorias");
+      menu.innerHTML = `<button onclick="filtrar('todos')" class="menu-btn menu-activo text-textoGris hover:text-acento transition text-xs font-semibold tracking-widest uppercase">Todo</button>`;
+      const catVisibles = categorias.filter(cat => !cat.oculta);
+      catVisibles.forEach(cat => {
+        menu.innerHTML += `<button onclick="filtrar('${cat.nombre}')" class="menu-btn text-textoGris hover:text-acento transition text-xs font-semibold tracking-widest uppercase">${cat.nombre}</button>`;
+      });
+    }
+
+    function obtenerProductosVisibles() {
+      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
+      return productos.filter(p => noms.includes(p.categoria.toLowerCase()));
+    }
+
+    window.buscarProducto = function() {
+      const texto = document.getElementById("buscador").value.toLowerCase();
+      document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("menu-activo"));
+      
+      if(texto === "") {
+        document.getElementById("titulo-categoria").innerText = "Todas las propiedades";
+        if(document.querySelectorAll(".menu-btn").length > 0) document.querySelectorAll(".menu-btn")[0].classList.add("menu-activo");
+      } else {
+        document.getElementById("titulo-categoria").innerText = "Resultados";
+      }
+
+      const perms = obtenerProductosVisibles();
+      const filtrados = perms.filter(p => 
+        p.nombre.toLowerCase().includes(texto) || 
+        p.descripcion.toLowerCase().includes(texto) ||
+        (p.ubicacion && p.ubicacion.toLowerCase().includes(texto))
+      );
+      renderizarProductos(filtrados);
+    }
+
+    window.filtrar = function(catNombre) {
+      document.getElementById("buscador").value = ""; 
+      document.querySelectorAll(".menu-btn").forEach(btn => {
+        btn.classList.remove("menu-activo");
+        if (catNombre === "todos" && btn.innerText.toLowerCase() === "todo") btn.classList.add("menu-activo");
+        else if (btn.innerText.toLowerCase() === catNombre.toLowerCase()) btn.classList.add("menu-activo");
+      });
+      document.getElementById("titulo-categoria").innerText = catNombre === "todos" ? "Todas las propiedades" : catNombre;
+      const perms = obtenerProductosVisibles();
+      const filtrados = catNombre === "todos" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
+      renderizarProductos(filtrados);
+    }
+
+    function renderizarProductos(items) {
+      const grilla = document.getElementById("grilla-productos"); grilla.innerHTML = "";
+      if (items.length === 0) {
+        grilla.innerHTML = `<p class="text-textoGris text-center col-span-full py-10">No se encontraron resultados.</p>`; return;
+      }
+      items.forEach(prod => {
+        const tarjeta = document.createElement('div');
+        tarjeta.className = "fade-in-up bg-fondoTarjeta p-5 rounded-sm shadow-xl hover:-translate-y-2 transition transform duration-300 cursor-pointer group flex flex-col items-center border border-gray-800 relative";
+        tarjeta.onclick = () => window.abrirModal(prod.id);
+        
+        const galeriaReal = (prod.galeria || []).filter(url => url !== prod.imagen);
+        const iconoGaleria = (galeriaReal.length > 0) ? `<div class="absolute top-7 right-7 bg-black/60 text-white rounded-full p-2 text-xs backdrop-blur-sm z-10 shadow-lg"><i class="fa-solid fa-images"></i></div>` : '';
+
+        const htmlUbicacion = prod.ubicacion ? `<p class="text-textoGris text-xs mt-2 truncate w-full text-center"><i class="fa-solid fa-location-dot"></i> ${prod.ubicacion}</p>` : '';
+
+        tarjeta.innerHTML = `
+          ${iconoGaleria}
+          <div class="w-full aspect-[4/3] overflow-hidden rounded-sm mb-4 bg-fondoOscuro flex items-center justify-center relative">
+            <img src="${prod.imagen}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
+          </div>
+          <h3 class="font-bold text-center text-textoClaro text-lg mb-1 leading-tight group-hover:text-acento transition">${prod.nombre}</h3>
+          <p class="text-green-400 font-bold text-xl mb-1">${prod.precio || 'Consultar'}</p>
+          ${htmlUbicacion}
+          <div class="h-[1px] w-12 bg-acento opacity-50 mt-4 mb-4"></div>
+          <p class="text-textoGris text-xs uppercase tracking-widest">Ver Detalles</p>
+        `;
+        grilla.appendChild(tarjeta); observador.observe(tarjeta);
+      });
+    }
+
+    window.cambiarFotoModal = function(direccion, evento) {
+      if(evento) evento.stopPropagation();
+      window.indiceModalActual += direccion;
+      if (window.indiceModalActual < 0) window.indiceModalActual = window.fotosModal.length - 1;
+      if (window.indiceModalActual >= window.fotosModal.length) window.indiceModalActual = 0;
+      const imgContenedor = document.getElementById('imagen-modal-principal');
+      imgContenedor.style.opacity = '0.3';
+      setTimeout(() => {
+        imgContenedor.src = window.fotosModal[window.indiceModalActual];
+        imgContenedor.style.opacity = '1';
+        document.getElementById('indicador-fotos').innerText = (window.indiceModalActual + 1) + " / " + window.fotosModal.length;
+      }, 150);
+    }
+
+    window.abrirModal = function(id) {
+      const prod = productos.find(p => p.id === id); if (!prod) return;
+
+      const todas = [prod.imagen, ...(prod.galeria || [])];
+      window.fotosModal = [...new Set(todas)]; window.indiceModalActual = 0;
+
+      let controles = '';
+      if (window.fotosModal.length > 1) {
+        controles = `
+          <button onclick="cambiarFotoModal(-1, event)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white rounded-full w-10 h-10 flex items-center justify-center transition shadow-lg border border-gray-600 z-20"><i class="fa-solid fa-chevron-left"></i></button>
+          <button onclick="cambiarFotoModal(1, event)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white rounded-full w-10 h-10 flex items-center justify-center transition shadow-lg border border-gray-600 z-20"><i class="fa-solid fa-chevron-right"></i></button>
+          <div id="indicador-fotos" class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/80 px-3 py-1 rounded-full text-white text-[10px] tracking-widest z-20 border border-gray-600 shadow-md">
+            1 / ${window.fotosModal.length}
+          </div>`;
+      }
+
+      const htmlUbicacion = prod.ubicacion ? `<p class="text-textoGris text-sm mb-4"><i class="fa-solid fa-location-dot"></i> ${prod.ubicacion}</p>` : '';
+
+      const modal = document.getElementById("modal-producto");
+      modal.classList.remove("hidden"); modal.classList.add("flex");
+      
+      modal.innerHTML = `
+        <div class="bg-fondoTarjeta w-full max-w-md mx-auto rounded-md overflow-hidden shadow-2xl relative flex flex-col my-auto animate-fade-in-up border border-gray-700" onclick="event.stopPropagation()">
+          <button onclick="cerrarModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-black/90 text-white rounded-full w-8 h-8 flex items-center justify-center z-30 transition border border-gray-600 shadow-lg"><i class="fa-solid fa-xmark"></i></button>
+          
+          <div class="w-full aspect-[4/3] overflow-hidden bg-fondoOscuro relative group shrink-0">
+            <img id="imagen-modal-principal" src="${window.fotosModal[0]}" class="w-full h-full object-cover object-center transition-opacity duration-300">
+            ${controles}
+          </div>
+          
+          <div class="p-6 flex flex-col text-left">
+            <p class="text-acento text-[10px] uppercase font-bold tracking-widest mb-1">${prod.categoria}</p>
+            <h3 class="text-2xl font-bold text-textoClaro mb-1">${prod.nombre}</h3>
+            <p class="text-green-400 font-bold text-2xl mb-2">${prod.precio || 'Consultar Precio'}</p>
+            ${htmlUbicacion}
+            <div class="h-[1px] w-full bg-gray-700 mb-4"></div>
+            <p class="text-textoGris text-sm mb-6 leading-relaxed">${prod.descripcion}</p>
+            <a href="https://wa.me/543755641575?text=Hola!%20Me%20gustar%C3%ADa%20consultar%20por%20la%20propiedad:%20${encodeURIComponent(prod.nombre)}" target="_blank" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-sm flex justify-center items-center gap-2 mt-auto shadow-lg">
+              Contactar por WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    window.cerrarModal = function() {
+      const modal = document.getElementById("modal-producto");
+      modal.classList.add("hidden"); modal.classList.remove("flex");
+    }
+
+    document.getElementById("modal-producto").addEventListener('click', function(e) {
+      if(e.target === this) { window.cerrarModal(); }
+    });
+
+    cargarDatos();
+  </script>
+</body>
+</html>

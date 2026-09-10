@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Gestión Inmobiliaria</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            fondoOscuro: '#0f172a',
+            fondoMedio: '#1e293b', 
+            fondoTarjeta: '#334155',
+            acento: '#3b82f6',
+            acentoOscuro: '#2563eb',
+            textoClaro: '#f8fafc',
+            textoGris: '#94a3b8'
+          },
+          fontFamily: {
+            sans: ['"Inter"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .menu-activo { color: #3b82f6 !important; border-bottom: 2px solid #3b82f6; padding-bottom: 2px; }
+  </style>
+</head>
+
+<body class="bg-fondoMedio text-textoClaro font-sans min-h-screen flex flex-col antialiased">
+
+  <!-- PANTALLA DE LOGIN -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center bg-fondoOscuro p-4 z-50">
+    <div class="bg-fondoTarjeta p-8 rounded-md shadow-2xl border border-gray-700 w-full max-w-sm text-center">
+      <h2 class="text-3xl font-bold text-acento mb-6">Admin Inmobiliaria</h2>
+      <form id="form-login" class="flex flex-col gap-4">
+        <input type="email" id="login-email" placeholder="Correo electrónico" required class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-3 rounded focus:border-acento outline-none transition text-sm">
+        <input type="password" id="login-password" placeholder="Contraseña" required class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-3 rounded focus:border-acento outline-none transition text-sm">
+        <button type="submit" id="btn-login" class="bg-acento hover:bg-acentoOscuro text-white font-bold py-3 rounded transition uppercase tracking-widest text-sm mt-2">
+          Ingresar
+        </button>
+        <p id="login-error" class="text-red-500 text-xs hidden mt-2">Credenciales incorrectas.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- PANTALLA PRINCIPAL -->
+  <div id="admin-screen" class="hidden flex-col min-h-screen">
+    <nav class="bg-fondoOscuro py-4 px-6 md:px-12 flex flex-wrap justify-between items-center border-b border-gray-800 shadow-xl sticky top-0 z-40 gap-4">
+      <div class="text-xl font-bold text-textoClaro tracking-wide">
+        Gestión <span class="text-acento font-light">Inmuebles</span>
+      </div>
+      
+      <div class="flex flex-wrap gap-2 md:gap-3">
+        <button onclick="abrirModalAnuncio()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] sm:text-xs font-bold py-2 px-3 rounded transition shadow flex items-center gap-2 uppercase tracking-wider">
+          <i class="fa-solid fa-bullhorn"></i> <span class="hidden sm:inline">Anuncio</span>
+        </button>
+        <button onclick="abrirModalCategorias()" class="bg-gray-700 hover:bg-gray-600 text-white text-[10px] sm:text-xs font-bold py-2 px-3 rounded transition shadow flex items-center gap-2 uppercase tracking-wider">
+          <i class="fa-solid fa-tags"></i> <span class="hidden sm:inline">Categorías</span>
+        </button>
+        <button onclick="abrirModalNuevo()" class="bg-acento hover:bg-acentoOscuro text-white text-[10px] sm:text-xs font-bold py-2 px-3 rounded transition shadow flex items-center gap-2 uppercase tracking-wider">
+          <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Nueva Propiedad</span>
+        </button>
+        <button onclick="cerrarSesion()" class="bg-red-600 hover:bg-red-700 text-white text-[10px] sm:text-xs font-bold py-2 px-3 rounded transition shadow flex items-center gap-2 uppercase tracking-wider ml-2">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </nav>
+
+    <main class="py-10 px-6 md:px-12 max-w-7xl mx-auto w-full">
+      <div id="menu-categorias" class="flex flex-wrap justify-center gap-4 md:gap-8 mb-12"></div>
+      <h2 id="titulo-categoria" class="text-3xl font-bold text-textoClaro capitalize mb-6 text-center">Todo</h2>
+      <div id="grilla-admin" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+    </main>
+  </div>
+
+  <!-- Modal Nueva Propiedad -->
+  <div id="modal-form" class="fixed inset-0 bg-black bg-opacity-90 hidden flex items-center justify-center p-4 z-50 transition-opacity overflow-y-auto py-10">
+    <div class="bg-fondoTarjeta rounded-md max-w-lg w-full p-8 border border-gray-700 shadow-2xl relative my-auto">
+      <button onclick="cerrarModal()" class="absolute top-4 right-4 text-textoGris hover:text-textoClaro transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+      <h3 id="modal-titulo" class="text-2xl font-bold text-acento mb-6 border-b border-gray-700 pb-2">Agregar Propiedad</h3>
+      
+      <form id="form-producto" class="flex flex-col gap-4">
+        <input type="hidden" id="prod-id">
+        
+        <div>
+          <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Título de publicación</label>
+          <input type="text" id="nombre" required placeholder="Ej: Lote en Barrio Cerrado" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition">
+        </div>
+
+        <div class="flex gap-4">
+          <div class="w-1/2">
+            <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Categoría</label>
+            <select id="categoria-select" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition"></select>
+          </div>
+          <div class="w-1/2">
+            <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Precio (Texto)</label>
+            <input type="text" id="precio" required placeholder="Ej: U$D 15.000" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Ubicación (Opcional)</label>
+          <input type="text" id="ubicacion" placeholder="Ej: Av. San Martín 123 o Link de Maps" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Descripción</label>
+          <textarea id="descripcion" required class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition" rows="3"></textarea>
+        </div>
+
+        <div class="bg-fondoOscuro p-4 rounded border border-gray-700">
+          <label class="block text-sm font-bold text-acento uppercase tracking-wider mb-2"><i class="fa-solid fa-image"></i> Foto de Portada</label>
+          <input type="file" id="imagen-file" accept="image/*" class="w-full text-sm text-textoGris file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-acento file:text-white hover:file:bg-acentoOscuro transition">
+          <div id="preview-portada" class="mt-3 hidden">
+            <div class="w-24 h-24 rounded-md overflow-hidden border-2 border-gray-600 shadow-md">
+              <img id="img-portada-actual" src="" class="w-full h-full object-cover">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-fondoOscuro p-4 rounded border border-gray-700">
+          <label class="block text-sm font-bold text-acento uppercase tracking-wider mb-1"><i class="fa-solid fa-images"></i> Galería Extra (Opcional)</label>
+          <input type="file" id="galeria-files" accept="image/*" multiple class="w-full text-sm text-textoGris file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-gray-700 file:text-white hover:file:bg-gray-600 transition mb-4">
+          <div id="galeria-actual-container" class="flex gap-4 flex-wrap"></div>
+        </div>
+
+        <button type="submit" id="btn-guardar" class="bg-acento hover:bg-acentoOscuro text-white font-bold py-3 rounded mt-2 transition uppercase tracking-widest text-sm shadow-lg">Guardar Propiedad</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Gestor de Categorías -->
+  <div id="modal-categorias" class="fixed inset-0 bg-black bg-opacity-90 hidden flex items-center justify-center p-4 z-50 transition-opacity">
+    <div class="bg-fondoTarjeta rounded-md max-w-md w-full p-8 border border-gray-700 shadow-2xl relative">
+      <button onclick="cerrarModalCategorias()" class="absolute top-4 right-4 text-textoGris hover:text-textoClaro transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+      <h3 class="text-2xl font-bold text-acento mb-4 border-b border-gray-700 pb-2">Categorías</h3>
+      <form id="form-nueva-cat" class="flex gap-2 mb-6">
+        <input type="text" id="nueva-cat-nombre" placeholder="Ej: Terrenos, Casas..." required class="flex-1 bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition">
+        <button type="submit" class="bg-acento hover:bg-acentoOscuro text-white px-4 rounded transition"><i class="fa-solid fa-plus"></i></button>
+      </form>
+      <div class="max-h-64 overflow-y-auto pr-2">
+        <ul id="lista-gestion-categorias" class="flex flex-col gap-3"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Anuncios -->
+  <div id="modal-anuncio" class="fixed inset-0 bg-black bg-opacity-90 hidden flex items-center justify-center p-4 z-50 transition-opacity overflow-y-auto">
+    <div class="bg-fondoTarjeta rounded-md max-w-lg w-full p-8 border border-acento shadow-2xl relative">
+      <button onclick="cerrarModalAnuncio()" class="absolute top-4 right-4 text-textoGris hover:text-textoClaro transition"><i class="fa-solid fa-xmark text-xl"></i></button>
+      <h3 class="text-2xl font-bold text-acento mb-6 border-b border-gray-700 pb-2"><i class="fa-solid fa-bullhorn"></i> Anuncio Emergente</h3>
+      
+      <form id="form-anuncio" class="flex flex-col gap-4">
+        <label class="flex items-center gap-3 bg-fondoOscuro p-4 rounded border border-gray-700 cursor-pointer hover:border-acento transition">
+          <input type="checkbox" id="anuncio-activo" class="w-5 h-5 accent-acento">
+          <span class="text-sm font-bold text-textoClaro">Mostrar este anuncio</span>
+        </label>
+        <div>
+          <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Título</label>
+          <input type="text" id="anuncio-titulo" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-textoGris uppercase tracking-wider mb-1">Mensaje</label>
+          <textarea id="anuncio-texto" rows="4" class="w-full bg-fondoOscuro border border-gray-700 text-textoClaro p-2 rounded focus:border-acento outline-none transition"></textarea>
+        </div>
+        <div class="bg-fondoOscuro p-4 rounded border border-gray-700">
+          <label class="block text-sm font-bold text-acento uppercase tracking-wider mb-2"><i class="fa-solid fa-image"></i> Imagen de Fondo (Textura)</label>
+          <input type="file" id="anuncio-imagen" accept="image/*" class="w-full text-sm text-textoGris file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-acento file:text-white hover:file:bg-acentoOscuro transition">
+          <div id="preview-anuncio-bg" class="mt-3 hidden">
+            <div class="w-full h-24 rounded-md overflow-hidden border border-gray-600 relative">
+              <img id="img-anuncio-actual" src="" class="w-full h-full object-cover opacity-50">
+            </div>
+          </div>
+        </div>
+        <button type="submit" id="btn-guardar-anuncio" class="bg-acento hover:bg-acentoOscuro text-white font-bold py-3 rounded mt-2 transition uppercase tracking-widest text-sm shadow-lg">Publicar Anuncio</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    const IMGBB_API_KEY = "ce0938ece2bee753e1fdb8725e95e854";
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // NUEVA CONFIGURACIÓN: TIO JUANJO
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHEemfeOAbqn8zwcJIQMgPCWoj-rieWjo",
+      authDomain: "tio-juanjo.firebaseapp.com",
+      projectId: "tio-juanjo",
+      storageBucket: "tio-juanjo.firebasestorage.app",
+      messagingSenderId: "465060896072",
+      appId: "1:465060896072:web:d96cafe70ef8afd56e677d",
+      measurementId: "G-7W0HGSHTWG"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let productos = [];
+    let categorias = [];
+    let urlImagenActual = ""; 
+    let galeriaActual = []; 
+    let urlAnuncioActual = "";
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-screen').classList.remove('hidden');
+        document.getElementById('admin-screen').classList.add('flex');
+        iniciarAppAdmin();
+      } else {
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('admin-screen').classList.add('hidden');
+        document.getElementById('admin-screen').classList.remove('flex');
+      }
+    });
+
+    document.getElementById('form-login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pass = document.getElementById('login-password').value;
+      const btn = document.getElementById('btn-login'); btn.innerText = "Verificando...";
+      signInWithEmailAndPassword(auth, email, pass)
+        .then(() => { document.getElementById('login-error').classList.add('hidden'); })
+        .catch(() => { document.getElementById('login-error').classList.remove('hidden'); btn.innerText = "Ingresar"; });
+    });
+
+    window.cerrarSesion = function() { signOut(auth).then(() => { window.location.reload(); }); }
+
+    function iniciarAppAdmin() {
+      inicializarCategorias().then(() => cargarProductos());
+    }
+
+    async function inicializarCategorias() {
+      const snap = await getDocs(collection(db, "categorias_inmuebles"));
+      if (snap.empty) {
+        const cats = ["Terrenos", "Alquileres", "Casas", "Locales"];
+        for (let cat of cats) { await addDoc(collection(db, "categorias_inmuebles"), { nombre: cat, oculta: false }); }
+      }
+      await refrescarCategorias();
+    }
+
+    async function refrescarCategorias() {
+      const snap = await getDocs(collection(db, "categorias_inmuebles"));
+      categorias = []; snap.forEach(doc => { categorias.push({ id: doc.id, ...doc.data() }); });
+      categorias.sort((a, b) => a.nombre.localeCompare(b.nombre)); 
+      renderizarUI();
+    }
+
+    function renderizarUI() {
+      const menu = document.getElementById("menu-categorias");
+      const selectCat = document.getElementById("categoria-select");
+      const listaGestion = document.getElementById("lista-gestion-categorias");
+      
+      menu.innerHTML = `<button onclick="filtrarAdmin('todos')" class="menu-btn menu-activo text-textoClaro hover:text-acento transition text-xs font-semibold tracking-widest uppercase">Todo</button>`;
+      selectCat.innerHTML = ""; listaGestion.innerHTML = "";
+      
+      categorias.forEach(cat => {
+        const iconoOculto = cat.oculta ? ' <i class="fa-solid fa-eye-slash text-gray-500"></i>' : '';
+        menu.innerHTML += `<button onclick="filtrarAdmin('${cat.nombre}')" class="menu-btn text-textoClaro hover:text-acento transition text-xs font-semibold tracking-widest uppercase flex items-center gap-1">${cat.nombre}${iconoOculto}</button>`;
+        selectCat.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+        const iconOjo = cat.oculta ? 'fa-eye-slash text-gray-600' : 'fa-eye text-green-500';
+        listaGestion.innerHTML += `
+          <li class="flex justify-between items-center bg-fondoOscuro p-3 rounded border border-gray-700">
+            <span class="${cat.oculta ? 'text-gray-500 line-through' : 'text-textoClaro'}">${cat.nombre}</span>
+            <div class="flex gap-4">
+              <button onclick="toggleCategoria('${cat.id}', ${cat.oculta})" class="transition"><i class="fa-solid ${iconOjo}"></i></button>
+              <button onclick="borrarCategoria('${cat.id}')" class="text-red-600 hover:text-red-500 transition"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </li>`;
+      });
+    }
+
+    window.abrirModalCategorias = function() { document.getElementById("modal-categorias").classList.remove("hidden"); }
+    window.cerrarModalCategorias = function() { document.getElementById("modal-categorias").classList.add("hidden"); }
+    
+    document.getElementById('form-nueva-cat').addEventListener('submit', async (e) => {
+      e.preventDefault(); const nombre = document.getElementById('nueva-cat-nombre').value.trim();
+      await addDoc(collection(db, "categorias_inmuebles"), { nombre: nombre, oculta: false });
+      document.getElementById('nueva-cat-nombre').value = ""; refrescarCategorias();
+    });
+
+    window.toggleCategoria = async function(id, estadoActual) { await updateDoc(doc(db, "categorias_inmuebles", id), { oculta: !estadoActual }); refrescarCategorias(); }
+    window.borrarCategoria = async function(id) { if(confirm("¿Borrar categoría?")) { await deleteDoc(doc(db, "categorias_inmuebles", id)); refrescarCategorias(); } }
+
+    async function cargarProductos() {
+      const querySnapshot = await getDocs(collection(db, "inmuebles"));
+      productos = []; querySnapshot.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
+      filtrarAdmin('todos');
+    }
+
+    window.filtrarAdmin = function(cat) {
+      const botones = document.querySelectorAll(".menu-btn");
+      botones.forEach(btn => {
+        btn.classList.remove("menu-activo");
+        const textoBoton = btn.innerText.replace(" ", "").toLowerCase();
+        if (cat === "todos" && textoBoton.includes("todo")) btn.classList.add("menu-activo");
+        else if (textoBoton.includes(cat.replace(" ", "").toLowerCase())) btn.classList.add("menu-activo");
+      });
+      document.getElementById("titulo-categoria").innerText = cat === "todos" ? "Todas las propiedades" : cat;
+
+      const filtrados = cat === "todos" ? productos : productos.filter(p => p.categoria.toLowerCase() === cat.toLowerCase());
+      const grilla = document.getElementById("grilla-admin"); grilla.innerHTML = "";
+
+      filtrados.forEach(prod => {
+        const badgeGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-2 right-2 bg-black/80 text-white text-[10px] px-2 py-1 rounded-full shadow"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
+        grilla.innerHTML += `
+          <div class="bg-fondoTarjeta p-4 rounded border border-gray-700 flex flex-col shadow-lg">
+            <div class="w-full aspect-[4/3] overflow-hidden mb-3 bg-fondoOscuro rounded relative">
+              <img src="${prod.imagen}" class="w-full h-full object-cover opacity-90">
+              ${badgeGaleria}
+            </div>
+            <p class="text-acento text-[10px] uppercase font-bold tracking-widest">${prod.categoria}</p>
+            <h3 class="text-lg font-bold text-textoClaro mb-1 leading-tight">${prod.nombre}</h3>
+            <p class="text-green-400 font-bold mb-3">${prod.precio || '-'}</p>
+            <div class="mt-auto flex gap-2 border-t border-gray-700 pt-3">
+              <button onclick="editarProducto('${prod.id}')" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white text-xs py-2 rounded transition"><i class="fa-solid fa-pen"></i> Editar</button>
+              <button onclick="borrarProducto('${prod.id}')" class="flex-1 bg-red-700 hover:bg-red-600 text-white text-xs py-2 rounded transition"><i class="fa-solid fa-trash"></i> Borrar</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    const comprimirImagen = (archivo) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader(); reader.readAsDataURL(archivo);
+        reader.onload = (event) => {
+          const img = new Image(); img.src = event.target.result;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800; const scaleSize = MAX_WIDTH / img.width;
+            if (scaleSize < 1) { canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize; } 
+            else { canvas.width = img.width; canvas.height = img.height; }
+            const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            canvas.toBlob((blob) => { resolve(new File([blob], archivo.name, { type: 'image/jpeg' })); }, 'image/jpeg', 0.70); 
+          };
+        };
+      });
+    };
+
+    window.abrirModalNuevo = function() {
+      document.getElementById('form-producto').reset();
+      document.getElementById('imagen-file').value = ""; document.getElementById('galeria-files').value = "";
+      document.getElementById('prod-id').value = "";
+      document.getElementById('modal-titulo').innerText = "Nueva Propiedad";
+      document.getElementById('preview-portada').classList.add('hidden');
+      document.getElementById("modal-form").classList.remove("hidden");
+      document.getElementById('imagen-file').required = true;
+      galeriaActual = []; renderizarGaleriaActual();
+    }
+
+    window.editarProducto = function(id) {
+      const prod = productos.find(p => p.id === id);
+      document.getElementById('prod-id').value = prod.id;
+      document.getElementById('nombre').value = prod.nombre;
+      document.getElementById('precio').value = prod.precio || "";
+      document.getElementById('ubicacion').value = prod.ubicacion || "";
+      document.getElementById('categoria-select').value = prod.categoria;
+      document.getElementById('descripcion').value = prod.descripcion;
+      urlImagenActual = prod.imagen; 
+      document.getElementById('imagen-file').value = ""; document.getElementById('galeria-files').value = "";
+      document.getElementById('preview-portada').classList.remove('hidden');
+      document.getElementById('img-portada-actual').src = prod.imagen;
+      galeriaActual = prod.galeria || []; renderizarGaleriaActual();
+      document.getElementById('modal-titulo').innerText = "Editar Propiedad";
+      document.getElementById('imagen-file').required = false; 
+      document.getElementById("modal-form").classList.remove("hidden");
+    }
+
+    window.renderizarGaleriaActual = function() {
+      const container = document.getElementById('galeria-actual-container'); container.innerHTML = "";
+      if (galeriaActual.length > 0) {
+        galeriaActual.forEach((url, index) => {
+          container.innerHTML += `
+            <div class="relative w-24 h-24 rounded-md overflow-hidden border-2 border-gray-600 shadow-md">
+              <img src="${url}" class="w-full h-full object-cover">
+              <button type="button" onclick="eliminarFotoGaleria(${index})" class="absolute top-1 right-1 bg-red-600 hover:bg-red-800 text-white rounded-full w-7 h-7 flex items-center justify-center transition"><i class="fa-solid fa-trash text-xs"></i></button>
+            </div>`;
+        });
+      }
+    }
+
+    window.eliminarFotoGaleria = function(index) { galeriaActual.splice(index, 1); renderizarGaleriaActual(); }
+    window.cerrarModal = function() { document.getElementById("modal-form").classList.add("hidden"); }
+    window.borrarProducto = async function(id) { if(confirm("¿Borrar propiedad?")) { await deleteDoc(doc(db, "inmuebles", id)); cargarProductos(); } }
+
+    document.getElementById('form-producto').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const boton = document.getElementById('btn-guardar'); const originalText = boton.innerHTML; boton.disabled = true;
+      try {
+        const id = document.getElementById('prod-id').value;
+        const archivoFoto = document.getElementById('imagen-file').files[0];
+        const archivosGaleria = document.getElementById('galeria-files').files;
+        let urlFinal = urlImagenActual; 
+
+        if (archivoFoto) {
+          boton.innerHTML = 'Subiendo...';
+          const fotoComprimida = await comprimirImagen(archivoFoto); const formData = new FormData(); formData.append("image", fotoComprimida);
+          const respuestaImgBB = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+          const datosImgBB = await respuestaImgBB.json();
+          if (datosImgBB.success) { urlFinal = datosImgBB.data.url; }
+        }
+
+        let nuevasUrlsGaleria = [];
+        if (archivosGaleria.length > 0) {
+          for (let i = 0; i < archivosGaleria.length; i++) {
+            boton.innerHTML = `Subiendo extra (${i+1}/${archivosGaleria.length})...`;
+            const fotoCom = await comprimirImagen(archivosGaleria[i]); const formGal = new FormData(); formGal.append("image", fotoCom);
+            const respGal = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formGal });
+            const dataGal = await respGal.json();
+            if (dataGal.success) { nuevasUrlsGaleria.push(dataGal.data.url); }
+          }
+        }
+        
+        const galeriaFinal = [...galeriaActual, ...nuevasUrlsGaleria];
+        const datosProducto = { 
+          nombre: document.getElementById('nombre').value, 
+          precio: document.getElementById('precio').value,
+          ubicacion: document.getElementById('ubicacion').value,
+          categoria: document.getElementById('categoria-select').value, 
+          descripcion: document.getElementById('descripcion').value, 
+          imagen: urlFinal, galeria: galeriaFinal 
+        };
+
+        boton.innerHTML = 'Guardando...';
+        if (id) { await updateDoc(doc(db, "inmuebles", id), datosProducto); } else { await addDoc(collection(db, "inmuebles"), datosProducto); }
+        cerrarModal(); cargarProductos(); 
+      } catch (error) { alert("Error: " + error.message); } finally { boton.innerHTML = originalText; boton.disabled = false; }
+    });
+
+    window.abrirModalAnuncio = async function() {
+      document.getElementById("modal-anuncio").classList.remove("hidden");
+      try {
+        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById('anuncio-activo').checked = data.activo || false;
+          document.getElementById('anuncio-titulo').value = data.titulo || "";
+          document.getElementById('anuncio-texto').value = data.texto || "";
+          urlAnuncioActual = data.imagen || "";
+          if(urlAnuncioActual) {
+            document.getElementById('preview-anuncio-bg').classList.remove('hidden');
+            document.getElementById('img-anuncio-actual').src = urlAnuncioActual;
+          }
+        }
+      } catch(e) {}
+    }
+    window.cerrarModalAnuncio = function() { document.getElementById("modal-anuncio").classList.add("hidden"); }
+
+    document.getElementById('form-anuncio').addEventListener('submit', async (e) => {
+      e.preventDefault(); const boton = document.getElementById('btn-guardar-anuncio'); const originalText = boton.innerHTML; boton.disabled = true;
+      try {
+        const archivoFoto = document.getElementById('anuncio-imagen').files[0]; let urlFinal = urlAnuncioActual; 
+        if (archivoFoto) {
+          const fotoComprimida = await comprimirImagen(archivoFoto); const formData = new FormData(); formData.append("image", fotoComprimida);
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+          const dat = await res.json(); if (dat.success) { urlFinal = dat.data.url; }
+        }
+        await setDoc(doc(db, "configuracion_inmuebles", "anuncio"), {
+          activo: document.getElementById('anuncio-activo').checked, titulo: document.getElementById('anuncio-titulo').value, texto: document.getElementById('anuncio-texto').value, imagen: urlFinal
+        });
+        cerrarModalAnuncio(); alert("Anuncio actualizado.");
+      } catch (error) {} finally { boton.innerHTML = originalText; boton.disabled = false; }
+    });
+  </script>
+</body>
+</html>
