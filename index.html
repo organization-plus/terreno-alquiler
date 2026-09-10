@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reome Inmobiliaria</title>
+  <title>insertar título</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,15 +36,15 @@
 <body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col antialiased">
   
   <!-- BARRA DE NAVEGACIÓN -->
-  <nav class="bg-white py-4 px-6 md:px-12 flex flex-row justify-between items-center sticky top-0 z-50">
+  <nav class="bg-white py-4 px-6 md:px-12 flex flex-row justify-between items-center sticky top-0 z-50 shadow-sm border-b border-gray-100">
     <div class="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2" onclick="cerrarDetalle(); window.scrollTo(0,0)">
       <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-home"></i></div>
-      Reome
+      insertar título
     </div>
     
     <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-      <a href="#" onclick="cerrarDetalle(); window.scrollTo(0,0)" class="hover:text-black">Inicio</a>
-      <a href="#seccion-catalogo" onclick="cerrarDetalle()" class="hover:text-black">Propiedades</a>
+      <a href="#" onclick="cerrarDetalle(); window.scrollTo(0,0)" class="hover:text-black transition">Inicio</a>
+      <a href="#seccion-catalogo" onclick="cerrarDetalle()" class="hover:text-black transition">Propiedades</a>
     </div>
 
     <a href="https://wa.me/543755658084" target="_blank" class="bg-black hover:bg-gray-800 text-white text-sm font-semibold py-2 px-5 rounded-full transition flex items-center gap-2">
@@ -55,24 +55,24 @@
   <!-- SECCIÓN PRINCIPAL -->
   <div id="seccion-principal" class="flex flex-col w-full">
     
-    <!-- HERO SECTION CON BUSCADOR FLOTANTE -->
+    <!-- HERO SECTION -->
     <header class="relative w-full h-[60vh] md:h-[70vh] px-4 md:px-12 pt-6">
       <div class="w-full h-full relative rounded-3xl overflow-hidden shadow-sm">
         <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80" class="w-full h-full object-cover">
-        <!-- Overlay oscuro suave para que el texto resalte -->
+        <!-- Overlay oscuro suave -->
         <div class="absolute inset-0 bg-black/30"></div>
         
         <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-4 leading-tight tracking-tight">Browse Homes, Apartments<br>& Rentals with Ease</h1>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-4 leading-tight tracking-tight">Buscá alquileres y terrenos</h1>
         </div>
       </div>
 
-      <!-- Buscador Flotante Estilo Píldora -->
+      <!-- Buscador Flotante -->
       <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-[90%] max-w-4xl z-20">
         <div class="bg-white rounded-full shadow-xl p-2 pl-6 flex items-center justify-between border border-gray-100">
           <div class="flex items-center gap-3 flex-1">
             <i class="fa-solid fa-search text-gray-400"></i>
-            <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por barrio, casa, lote..." class="w-full bg-transparent text-gray-900 focus:outline-none text-sm md:text-base placeholder-gray-400 font-medium">
+            <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar" class="w-full bg-transparent text-gray-900 focus:outline-none text-sm md:text-base placeholder-gray-400 font-medium">
           </div>
           <button class="bg-black text-white px-6 py-3 rounded-full text-sm font-bold ml-4 hover:bg-gray-800 transition">Buscar</button>
         </div>
@@ -81,20 +81,20 @@
 
     <main id="seccion-catalogo" class="pt-24 pb-20 px-6 md:px-12">
       <div class="text-center mb-12">
-        <h2 id="titulo-categoria" class="text-3xl font-bold capitalize mb-8 tracking-tight">Brome the Startss</h2>
+        <h2 id="titulo-categoria" class="text-3xl font-bold capitalize mb-8 tracking-tight">Catálogo de Propiedades</h2>
         
         <!-- Categorías Estilo Píldora -->
         <div id="menu-categorias" class="flex flex-wrap justify-center gap-3"></div>
       </div>
 
-      <!-- Grilla de Tarjetas Minimalistas -->
+      <!-- Grilla de Tarjetas -->
       <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 max-w-7xl mx-auto">
         <p class="text-center w-full col-span-full py-10 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-black text-2xl mb-2"></i><br>Cargando propiedades...</p>
       </div>
     </main>
     
     <footer class="bg-white py-8 text-center border-t border-gray-200 mt-auto">
-      <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">&copy; Reome Inmobiliaria</p>
+      <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">&copy; insertar título</p>
     </footer>
   </div>
 
@@ -129,10 +129,11 @@
             </div>
 
             <h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Descripción</h3>
-            <p class="text-gray-500 mb-8 whitespace-pre-wrap leading-relaxed text-sm" id="detalle-desc"></p>
+            <!-- BREAK-WORDS CORRIGE EL DESBORDE DE TEXTO SIN ESPACIOS -->
+            <p class="text-gray-500 mb-8 whitespace-pre-wrap break-words leading-relaxed text-sm" id="detalle-desc"></p>
 
             <a id="detalle-wsp" href="#" target="_blank" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-full transition text-sm flex justify-center items-center gap-2 shadow-md">
-              Contactar Asesor <i class="fa-brands fa-whatsapp text-lg"></i>
+              Contactar <i class="fa-brands fa-whatsapp text-lg"></i>
             </a>
           </div>
         </div>
@@ -147,9 +148,23 @@
   </div>
 
 
+  <!-- Modal de Anuncio -->
+  <div id="modal-anuncio" class="fixed inset-0 bg-black/50 backdrop-blur-md hidden items-center justify-center p-4 z-[60] transition-opacity">
+    <div class="bg-white w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-gray-200 animate-fade-in-up">
+      <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-30 bg-cover bg-center"></div>
+      <div class="relative z-10 p-8 flex flex-col items-center text-center h-full justify-center">
+        <button onclick="cerrarAnuncio()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+        <h3 id="anuncio-titulo" class="text-3xl font-bold text-gray-900 mb-4 tracking-tight leading-tight"></h3>
+        <!-- BREAK-WORDS AQUÍ TAMBIÉN PARA PREVENIR ERRORES EN EL ANUNCIO -->
+        <p id="anuncio-texto" class="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap break-words mb-2"></p>
+        <button onclick="cerrarAnuncio()" class="mt-8 bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full transition text-sm shadow-md">Entendido</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAHEemfeOAbqn8zwcJIQMgPCWoj-rieWjo",
@@ -179,7 +194,30 @@
       const prodSnap = await getDocs(collection(db, "inmuebles"));
       prodSnap.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
       
-      renderizarMenu(); filtrar('todos');
+      renderizarMenu(); filtrar('todos'); cargarAnuncio();
+    }
+
+    async function cargarAnuncio() {
+      if (sessionStorage.getItem("anuncioVisto_inm")) return;
+      try {
+        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.activo) {
+            document.getElementById('anuncio-titulo').innerText = data.titulo;
+            document.getElementById('anuncio-texto').innerText = data.texto;
+            if (data.imagen) document.getElementById('anuncio-bg').style.backgroundImage = `url('${data.imagen}')`;
+            document.getElementById('modal-anuncio').classList.remove('hidden');
+            document.getElementById('modal-anuncio').classList.add('flex');
+          }
+        }
+      } catch (e) {}
+    }
+
+    window.cerrarAnuncio = function() {
+      document.getElementById('modal-anuncio').classList.add('hidden');
+      document.getElementById('modal-anuncio').classList.remove('flex');
+      sessionStorage.setItem("anuncioVisto_inm", "true");
     }
 
     function renderizarMenu() {
@@ -191,14 +229,20 @@
       });
     }
 
+    function obtenerProductosVisibles() {
+      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
+      // SE EXCLUYEN LAS PROPIEDADES OCULTAS (!p.oculta)
+      return productos.filter(p => noms.includes(p.categoria.toLowerCase()) && !p.oculta);
+    }
+
     window.buscarProducto = function() {
       const texto = document.getElementById("buscador").value.toLowerCase();
       document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("menu-activo"));
       if(texto === "") {
         if(document.querySelectorAll(".menu-btn").length > 0) document.querySelectorAll(".menu-btn")[0].classList.add("menu-activo");
       }
-      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
-      const perms = productos.filter(p => noms.includes(p.categoria.toLowerCase()));
+      
+      const perms = obtenerProductosVisibles();
       const filtrados = perms.filter(p => p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto));
       renderizarProductos(filtrados);
     }
@@ -210,8 +254,8 @@
         if (catNombre === "todos" && btn.innerText.toLowerCase() === "todo") btn.classList.add("menu-activo");
         else if (btn.innerText.toLowerCase() === catNombre.toLowerCase()) btn.classList.add("menu-activo");
       });
-      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
-      const perms = productos.filter(p => noms.includes(p.categoria.toLowerCase()));
+      
+      const perms = obtenerProductosVisibles();
       const filtrados = catNombre === "todos" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
       renderizarProductos(filtrados);
     }
