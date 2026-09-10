@@ -10,23 +10,20 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- LIBRERÍAS DE MAPA -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            fondoOscuro: '#0f172a',
-            fondoMedio: '#1e293b', 
-            fondoTarjeta: '#334155',
-            acento: '#3b82f6',
-            acentoOscuro: '#2563eb',
-            textoClaro: '#f8fafc',
-            textoGris: '#94a3b8'
+            fondoOscuro: '#0f172a', fondoMedio: '#1e293b', fondoTarjeta: '#334155',
+            acento: '#3b82f6', acentoOscuro: '#2563eb', textoClaro: '#f8fafc', textoGris: '#94a3b8'
           },
-          fontFamily: {
-            sans: ['"Inter"', 'sans-serif'],
-          }
+          fontFamily: { sans: ['"Inter"', 'sans-serif'], }
         }
       }
     }
@@ -34,93 +31,128 @@
   <style>
     .menu-activo { color: #3b82f6 !important; border-bottom: 2px solid #3b82f6; padding-bottom: 2px; }
     html { scroll-behavior: smooth; }
-    .fade-in-up { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+    .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
     .fade-in-up.visible { opacity: 1; transform: translateY(0); }
-    .animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Scrollbar invisible para la galería de fotos en detalle */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 
 <body class="bg-gradient-to-b from-fondoOscuro via-fondoOscuro to-fondoMedio text-textoClaro font-sans min-h-screen flex flex-col antialiased">
   
-  <div class="fixed top-[-10%] left-[-10%] w-[40rem] h-[40rem] bg-acento opacity-[0.03] blur-[120px] rounded-full pointer-events-none z-0"></div>
-  <div class="fixed bottom-[-10%] right-[-5%] w-[30rem] h-[30rem] bg-acento opacity-[0.04] blur-[100px] rounded-full pointer-events-none z-0"></div>
-
-  <!-- Botón Flotante WhatsApp -->
+  <!-- WHATSAPP FLOTANTE GLOBAL (ACTUALIZADO AL NUMERO NUEVO) -->
   <a href="https://wa.me/543755658084" target="_blank" class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white w-14 h-14 rounded-full flex items-center justify-center text-3xl shadow-2xl z-50 transition transform hover:scale-110">
     <i class="fa-brands fa-whatsapp"></i>
   </a>
 
+  <!-- BARRA DE NAVEGACIÓN -->
   <nav class="bg-fondoOscuro py-4 px-6 md:px-12 flex flex-col md:flex-row justify-between items-center sticky top-0 z-40 border-b border-gray-800 shadow-xl">
-    <div class="text-2xl font-bold tracking-wider text-textoClaro mb-4 md:mb-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+    <div class="text-2xl font-bold tracking-wider text-textoClaro mb-4 md:mb-0 cursor-pointer" onclick="cerrarDetalle(); window.scrollTo(0,0)">
       Gestión <span class="text-acento font-light">Inmuebles</span>
     </div>
     <div class="flex gap-5">
       <a href="https://wa.me/543755658084" target="_blank" class="text-textoClaro hover:text-green-400 text-xl transition flex items-center gap-2">
-        <i class="fa-brands fa-whatsapp"></i> <span class="text-sm">Consultas</span>
+        <i class="fa-brands fa-whatsapp"></i> <span class="text-sm font-semibold">Contactar Asesor</span>
       </a>
     </div>
   </nav>
 
-  <header class="flex flex-col md:flex-row min-h-[50vh] md:min-h-[60vh] border-b border-gray-800">
-    <div class="md:w-1/2 flex flex-col justify-center p-10 md:p-20 order-2 md:order-1 relative z-10">
-      <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">
-        Encontrá tu<br><span class="text-acento font-light">lugar ideal</span>
-      </h1>
-      <p class="text-textoGris leading-relaxed max-w-md text-base">
-        Especialistas en la venta de terrenos, casas y alquileres temporarios o permanentes. Explorá nuestras propiedades y contactanos para asesoramiento personalizado.
-      </p>
-    </div>
-    
-    <div class="md:w-1/2 order-1 md:order-2 h-64 md:h-auto relative flex items-center justify-center overflow-hidden bg-fondoTarjeta">
-      <div class="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-fondoOscuro to-transparent z-10"></div>
-      <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=80" alt="Inmobiliaria Portada" class="w-full h-full object-cover opacity-60">
-    </div>
-  </header>
+  <!-- SECCIÓN PRINCIPAL (GRILLA) -->
+  <div id="seccion-principal" class="flex flex-col w-full">
+    <header class="flex flex-col md:flex-row min-h-[40vh] border-b border-gray-800">
+      <div class="md:w-1/2 flex flex-col justify-center p-10 md:p-20 relative z-10">
+        <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6">Encontrá tu<br><span class="text-acento font-light">lugar ideal</span></h1>
+        <p class="text-textoGris leading-relaxed max-w-md text-base">
+          Especialistas en la venta de terrenos, casas y alquileres. Explorá nuestras propiedades y contactanos para asesoramiento personalizado.
+        </p>
+      </div>
+      <div class="md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-fondoTarjeta hidden md:block">
+        <div class="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-fondoOscuro to-transparent z-10"></div>
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80" class="w-full h-full object-cover opacity-50">
+      </div>
+    </header>
 
-  <main id="seccion-productos" class="py-20 px-6 md:px-12">
-    
-    <div class="text-center mb-10">
-      <h2 id="titulo-categoria" class="text-4xl font-bold text-textoClaro capitalize mb-4">
-        Todas las propiedades
-      </h2>
-      <div class="w-24 h-1 bg-acento mx-auto mb-10"></div>
-
-      <div class="max-w-md mx-auto mb-12 relative">
-        <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por barrio, tipo, precio..." class="w-full bg-fondoTarjeta text-textoClaro border border-gray-700 rounded-sm py-3 px-4 pl-12 focus:outline-none focus:border-acento transition shadow-lg font-light text-sm placeholder-gray-500">
-        <i class="fa-solid fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-textoGris"></i>
+    <main class="py-16 px-6 md:px-12">
+      <div class="text-center mb-10">
+        <h2 id="titulo-categoria" class="text-4xl font-bold text-textoClaro capitalize mb-4">Catálogo de Propiedades</h2>
+        <div class="w-24 h-1 bg-acento mx-auto mb-10"></div>
+        <div class="max-w-md mx-auto mb-12 relative">
+          <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por barrio, tipo, descripción..." class="w-full bg-fondoTarjeta text-textoClaro border border-gray-700 rounded-sm py-3 px-4 pl-12 focus:outline-none focus:border-acento transition shadow-lg font-light text-sm">
+          <i class="fa-solid fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-textoGris"></i>
+        </div>
+        <div id="menu-categorias" class="flex flex-wrap justify-center gap-4 md:gap-8 border-b border-gray-800 pb-4"></div>
       </div>
 
-      <div id="menu-categorias" class="flex flex-wrap justify-center gap-4 md:gap-8 border-b border-gray-800 pb-4"></div>
-    </div>
-
-    <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto">
-      <p class="text-center w-full col-span-full py-10 text-textoGris"><i class="fa-solid fa-spinner fa-spin text-acento text-2xl mb-2"></i><br>Cargando propiedades...</p>
-    </div>
-
-  </main>
-
-  <footer class="bg-fondoOscuro py-8 text-center border-t border-gray-800 mt-auto">
-    <p class="text-textoGris text-xs uppercase tracking-widest">&copy; Gestión Inmobiliaria</p>
-  </footer>
-
-  <div id="modal-producto" class="fixed inset-0 bg-black bg-opacity-95 hidden flex-col items-center justify-center p-4 z-50 transition-opacity backdrop-blur-sm overflow-y-auto"></div>
-
-  <!-- Modal de Anuncio -->
-  <div id="modal-anuncio" class="fixed inset-0 bg-black/90 hidden items-center justify-center p-4 z-[60] transition-opacity backdrop-blur-md">
-    <div class="bg-fondoTarjeta w-full max-w-lg mx-auto rounded-md overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-acento/30 animate-fade-in-up">
-      <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-20 bg-cover bg-center"></div>
-      <div class="relative z-10 p-8 flex flex-col items-center text-center h-full justify-center">
-        <button onclick="cerrarAnuncio()" class="absolute top-3 right-3 text-textoGris hover:text-white transition"><i class="fa-solid fa-xmark text-xl"></i></button>
-        <h3 id="anuncio-titulo" class="text-3xl font-bold text-acento mb-4 tracking-wide leading-tight"></h3>
-        <p id="anuncio-texto" class="text-textoClaro text-base md:text-lg leading-relaxed whitespace-pre-wrap mb-2"></p>
-        <button onclick="cerrarAnuncio()" class="mt-8 bg-acento hover:bg-acentoOscuro text-white font-bold py-3 px-8 rounded transition uppercase tracking-widest text-xs shadow-lg">Entendido</button>
+      <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <p class="text-center w-full col-span-full py-10 text-textoGris"><i class="fa-solid fa-spinner fa-spin text-acento text-2xl mb-2"></i><br>Cargando propiedades...</p>
       </div>
+    </main>
+    <footer class="bg-fondoOscuro py-8 text-center border-t border-gray-800 mt-auto">
+      <p class="text-textoGris text-xs uppercase tracking-widest">&copy; Gestión Inmobiliaria</p>
+    </footer>
+  </div>
+
+
+  <!-- NUEVA VISTA: DETALLE DE PROPIEDAD AESTHETIC (Se abre al hacer clic) -->
+  <div id="vista-detalle" class="hidden flex-col w-full bg-fondoOscuro pb-20">
+    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-12 py-10">
+      
+      <!-- Botón Volver -->
+      <button onclick="cerrarDetalle()" class="text-textoGris hover:text-white mb-8 flex items-center gap-2 transition font-bold uppercase tracking-widest text-xs">
+        <i class="fa-solid fa-arrow-left"></i> Volver al Catálogo
+      </button>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Columna Izquierda: Fotografías -->
+        <div class="lg:col-span-2 flex flex-col gap-4">
+          <!-- Foto Principal -->
+          <div class="w-full aspect-[4/3] sm:aspect-video rounded-xl overflow-hidden shadow-2xl bg-fondoMedio border border-gray-700 relative">
+            <img id="detalle-img-main" src="" class="w-full h-full object-cover transition-opacity duration-300">
+          </div>
+          <!-- Galería Inferior (Scroll horizontal) -->
+          <div id="detalle-galeria" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
+            <!-- Se llena por JS -->
+          </div>
+        </div>
+
+        <!-- Columna Derecha: Información de la Propiedad -->
+        <div class="flex flex-col">
+          <div class="bg-fondoTarjeta p-8 rounded-xl shadow-2xl border border-gray-700 sticky top-24">
+            <span class="text-acento font-bold text-xs tracking-widest uppercase mb-2 block" id="detalle-cat">Categoría</span>
+            <h1 class="text-3xl sm:text-4xl font-bold text-textoClaro mb-4 leading-tight" id="detalle-titulo">Título Propiedad</h1>
+            
+            <!-- PRECIO AUTOMÁTICO CON SIGNO $ -->
+            <div class="flex items-center gap-3 border-b border-gray-600 pb-6 mb-6">
+              <div class="bg-acento/20 text-acento p-3 rounded-lg"><i class="fa-solid fa-tag text-2xl"></i></div>
+              <p class="text-3xl font-bold text-green-400" id="detalle-precio"></p>
+            </div>
+
+            <h3 class="text-lg font-bold text-textoClaro mb-3"><i class="fa-solid fa-align-left text-textoGris mr-2"></i> Descripción</h3>
+            <p class="text-textoGris mb-8 whitespace-pre-wrap leading-relaxed text-sm md:text-base" id="detalle-desc"></p>
+
+            <a id="detalle-wsp" href="#" target="_blank" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-lg transition uppercase tracking-widest text-sm flex justify-center items-center gap-3 shadow-lg">
+              Contactar Asesor <i class="fa-brands fa-whatsapp text-2xl"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN MAPA REAL (Solo aparece si el admin guardó la ubicación) -->
+      <div id="contenedor-mapa-cliente" class="mt-12 bg-fondoTarjeta p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-700 hidden">
+        <h3 class="text-2xl font-bold text-textoClaro mb-6 flex items-center gap-3">
+          <i class="fa-solid fa-map-location-dot text-acento"></i> Ubicación Exacta
+        </h3>
+        <div id="mapa-cliente" class="w-full h-80 md:h-96 rounded-lg overflow-hidden border border-gray-600 shadow-inner z-10"></div>
+      </div>
+
     </div>
   </div>
 
+
   <script type="module">
-    // NUEVA CONFIGURACIÓN: TIO JUANJO
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -130,8 +162,7 @@
       projectId: "tio-juanjo",
       storageBucket: "tio-juanjo.firebasestorage.app",
       messagingSenderId: "465060896072",
-      appId: "1:465060896072:web:d96cafe70ef8afd56e677d",
-      measurementId: "G-7W0HGSHTWG"
+      appId: "1:465060896072:web:d96cafe70ef8afd56e677d"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -139,8 +170,8 @@
 
     let productos = [];
     let categorias = [];
-    window.fotosModal = [];
-    window.indiceModalActual = 0;
+    let mapaCliente = null; 
+    let markerCliente = null;
 
     const observador = new IntersectionObserver((entradas) => {
       entradas.forEach(entrada => { if (entrada.isIntersecting) { entrada.target.classList.add('visible'); } });
@@ -153,30 +184,7 @@
       const prodSnap = await getDocs(collection(db, "inmuebles"));
       prodSnap.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
       
-      renderizarMenu(); filtrar('todos'); cargarAnuncio();
-    }
-
-    async function cargarAnuncio() {
-      if (sessionStorage.getItem("anuncioVisto_inm")) return;
-      try {
-        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          if (data.activo) {
-            document.getElementById('anuncio-titulo').innerText = data.titulo;
-            document.getElementById('anuncio-texto').innerText = data.texto;
-            if (data.imagen) document.getElementById('anuncio-bg').style.backgroundImage = `url('${data.imagen}')`;
-            document.getElementById('modal-anuncio').classList.remove('hidden');
-            document.getElementById('modal-anuncio').classList.add('flex');
-          }
-        }
-      } catch (e) {}
-    }
-
-    window.cerrarAnuncio = function() {
-      document.getElementById('modal-anuncio').classList.add('hidden');
-      document.getElementById('modal-anuncio').classList.remove('flex');
-      sessionStorage.setItem("anuncioVisto_inm", "true");
+      renderizarMenu(); filtrar('todos');
     }
 
     function renderizarMenu() {
@@ -188,28 +196,17 @@
       });
     }
 
-    function obtenerProductosVisibles() {
-      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
-      return productos.filter(p => noms.includes(p.categoria.toLowerCase()));
-    }
-
     window.buscarProducto = function() {
       const texto = document.getElementById("buscador").value.toLowerCase();
       document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("menu-activo"));
-      
       if(texto === "") {
-        document.getElementById("titulo-categoria").innerText = "Todas las propiedades";
+        document.getElementById("titulo-categoria").innerText = "Catálogo de Propiedades";
         if(document.querySelectorAll(".menu-btn").length > 0) document.querySelectorAll(".menu-btn")[0].classList.add("menu-activo");
-      } else {
-        document.getElementById("titulo-categoria").innerText = "Resultados";
-      }
+      } else { document.getElementById("titulo-categoria").innerText = "Resultados"; }
 
-      const perms = obtenerProductosVisibles();
-      const filtrados = perms.filter(p => 
-        p.nombre.toLowerCase().includes(texto) || 
-        p.descripcion.toLowerCase().includes(texto) ||
-        (p.ubicacion && p.ubicacion.toLowerCase().includes(texto))
-      );
+      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
+      const perms = productos.filter(p => noms.includes(p.categoria.toLowerCase()));
+      const filtrados = perms.filter(p => p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto));
       renderizarProductos(filtrados);
     }
 
@@ -220,109 +217,123 @@
         if (catNombre === "todos" && btn.innerText.toLowerCase() === "todo") btn.classList.add("menu-activo");
         else if (btn.innerText.toLowerCase() === catNombre.toLowerCase()) btn.classList.add("menu-activo");
       });
-      document.getElementById("titulo-categoria").innerText = catNombre === "todos" ? "Todas las propiedades" : catNombre;
-      const perms = obtenerProductosVisibles();
+      document.getElementById("titulo-categoria").innerText = catNombre === "todos" ? "Catálogo de Propiedades" : catNombre;
+      const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
+      const perms = productos.filter(p => noms.includes(p.categoria.toLowerCase()));
       const filtrados = catNombre === "todos" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
       renderizarProductos(filtrados);
     }
 
     function renderizarProductos(items) {
       const grilla = document.getElementById("grilla-productos"); grilla.innerHTML = "";
-      if (items.length === 0) {
-        grilla.innerHTML = `<p class="text-textoGris text-center col-span-full py-10">No se encontraron resultados.</p>`; return;
-      }
+      if (items.length === 0) { grilla.innerHTML = `<p class="text-textoGris text-center col-span-full py-10">No se encontraron resultados.</p>`; return; }
+      
       items.forEach(prod => {
         const tarjeta = document.createElement('div');
-        tarjeta.className = "fade-in-up bg-fondoTarjeta p-5 rounded-sm shadow-xl hover:-translate-y-2 transition transform duration-300 cursor-pointer group flex flex-col items-center border border-gray-800 relative";
-        tarjeta.onclick = () => window.abrirModal(prod.id);
+        tarjeta.className = "fade-in-up bg-fondoTarjeta rounded-xl shadow-xl hover:shadow-acento/20 transition transform hover:-translate-y-2 cursor-pointer group flex flex-col border border-gray-800 overflow-hidden";
+        tarjeta.onclick = () => window.abrirDetalle(prod.id);
         
-        const galeriaReal = (prod.galeria || []).filter(url => url !== prod.imagen);
-        const iconoGaleria = (galeriaReal.length > 0) ? `<div class="absolute top-7 right-7 bg-black/60 text-white rounded-full p-2 text-xs backdrop-blur-sm z-10 shadow-lg"><i class="fa-solid fa-images"></i></div>` : '';
+        const tieneGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-3 right-3 bg-black/70 text-white rounded-full px-3 py-1 text-xs backdrop-blur-sm z-10 font-semibold"><i class="fa-solid fa-images mr-1"></i> +${prod.galeria.length}</div>` : '';
+        const indicadorMapa = (prod.lat && prod.lng) ? `<div class="absolute top-3 left-3 bg-acento text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg z-10"><i class="fa-solid fa-location-dot"></i></div>` : '';
 
-        const htmlUbicacion = prod.ubicacion ? `<p class="text-textoGris text-xs mt-2 truncate w-full text-center"><i class="fa-solid fa-location-dot"></i> ${prod.ubicacion}</p>` : '';
+        // Formateo del PRECIO con signo $ automático en la grilla
+        const precioMostrado = prod.precio ? `$ ${prod.precio}` : 'Consultar';
 
         tarjeta.innerHTML = `
-          ${iconoGaleria}
-          <div class="w-full aspect-[4/3] overflow-hidden rounded-sm mb-4 bg-fondoOscuro flex items-center justify-center relative">
-            <img src="${prod.imagen}" loading="lazy" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition duration-500">
+          <div class="w-full aspect-[4/3] relative overflow-hidden bg-fondoOscuro">
+            ${indicadorMapa}
+            ${tieneGaleria}
+            <img src="${prod.imagen}" loading="lazy" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-110 transition duration-700">
           </div>
-          <h3 class="font-bold text-center text-textoClaro text-lg mb-1 leading-tight group-hover:text-acento transition">${prod.nombre}</h3>
-          <p class="text-green-400 font-bold text-xl mb-1">${prod.precio || 'Consultar'}</p>
-          ${htmlUbicacion}
-          <div class="h-[1px] w-12 bg-acento opacity-50 mt-4 mb-4"></div>
-          <p class="text-textoGris text-xs uppercase tracking-widest">Ver Detalles</p>
+          <div class="p-6 flex flex-col flex-1">
+            <p class="text-acento text-[10px] uppercase font-bold tracking-widest mb-2">${prod.categoria}</p>
+            <h3 class="font-bold text-textoClaro text-xl mb-3 leading-tight group-hover:text-acento transition line-clamp-2">${prod.nombre}</h3>
+            <div class="mt-auto">
+              <p class="text-green-400 font-bold text-2xl">${precioMostrado}</p>
+            </div>
+          </div>
         `;
         grilla.appendChild(tarjeta); observador.observe(tarjeta);
       });
     }
 
-    window.cambiarFotoModal = function(direccion, evento) {
-      if(evento) evento.stopPropagation();
-      window.indiceModalActual += direccion;
-      if (window.indiceModalActual < 0) window.indiceModalActual = window.fotosModal.length - 1;
-      if (window.indiceModalActual >= window.fotosModal.length) window.indiceModalActual = 0;
-      const imgContenedor = document.getElementById('imagen-modal-principal');
-      imgContenedor.style.opacity = '0.3';
+    // --- NUEVO SISTEMA SPA (Single Page Application) PARA DETALLES ---
+
+    window.cambiarFotoDetalle = function(url) {
+      const imgContenedor = document.getElementById('detalle-img-main');
+      imgContenedor.style.opacity = '0.4';
       setTimeout(() => {
-        imgContenedor.src = window.fotosModal[window.indiceModalActual];
+        imgContenedor.src = url;
         imgContenedor.style.opacity = '1';
-        document.getElementById('indicador-fotos').innerText = (window.indiceModalActual + 1) + " / " + window.fotosModal.length;
       }, 150);
     }
 
-    window.abrirModal = function(id) {
+    window.abrirDetalle = function(id) {
       const prod = productos.find(p => p.id === id); if (!prod) return;
 
-      const todas = [prod.imagen, ...(prod.galeria || [])];
-      window.fotosModal = [...new Set(todas)]; window.indiceModalActual = 0;
+      // 1. Ocultar Principal, Mostrar Detalle
+      document.getElementById('seccion-principal').classList.add('hidden');
+      document.getElementById('vista-detalle').classList.remove('hidden');
+      document.getElementById('vista-detalle').classList.add('flex');
+      window.scrollTo(0,0);
 
-      let controles = '';
-      if (window.fotosModal.length > 1) {
-        controles = `
-          <button onclick="cambiarFotoModal(-1, event)" class="absolute left-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white rounded-full w-10 h-10 flex items-center justify-center transition shadow-lg border border-gray-600 z-20"><i class="fa-solid fa-chevron-left"></i></button>
-          <button onclick="cambiarFotoModal(1, event)" class="absolute right-3 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-black text-white rounded-full w-10 h-10 flex items-center justify-center transition shadow-lg border border-gray-600 z-20"><i class="fa-solid fa-chevron-right"></i></button>
-          <div id="indicador-fotos" class="absolute bottom-3 left-1/2 -translate-x-1/2 bg-black/80 px-3 py-1 rounded-full text-white text-[10px] tracking-widest z-20 border border-gray-600 shadow-md">
-            1 / ${window.fotosModal.length}
-          </div>`;
+      // 2. Llenar Textos (Precio automático con $)
+      document.getElementById('detalle-cat').innerText = prod.categoria;
+      document.getElementById('detalle-titulo').innerText = prod.nombre;
+      document.getElementById('detalle-precio').innerText = prod.precio ? `$ ${prod.precio}` : 'Consultar Valor';
+      document.getElementById('detalle-desc').innerText = prod.descripcion;
+      
+      // WhatsApp (Número NUEVO actualizado)
+      const textoWsp = `Hola! Me gustaría consultar por la propiedad: ${prod.nombre}`;
+      document.getElementById('detalle-wsp').href = `https://wa.me/543755658084?text=${encodeURIComponent(textoWsp)}`;
+
+      // 3. Renderizar Galería Aesthetic
+      const todasLasFotos = [prod.imagen, ...(prod.galeria || [])];
+      const fotosUnicas = [...new Set(todasLasFotos)];
+      
+      document.getElementById('detalle-img-main').src = fotosUnicas[0];
+      
+      const galeriaContenedor = document.getElementById('detalle-galeria');
+      galeriaContenedor.innerHTML = "";
+      
+      if (fotosUnicas.length > 1) {
+        fotosUnicas.forEach(url => {
+          galeriaContenedor.innerHTML += `
+            <div onclick="cambiarFotoDetalle('${url}')" class="w-24 h-24 sm:w-32 sm:h-32 shrink-0 rounded-lg overflow-hidden border-2 border-transparent hover:border-acento cursor-pointer transition shadow-lg opacity-80 hover:opacity-100">
+              <img src="${url}" class="w-full h-full object-cover">
+            </div>
+          `;
+        });
       }
 
-      const htmlUbicacion = prod.ubicacion ? `<p class="text-textoGris text-sm mb-4"><i class="fa-solid fa-location-dot"></i> ${prod.ubicacion}</p>` : '';
-
-      const modal = document.getElementById("modal-producto");
-      modal.classList.remove("hidden"); modal.classList.add("flex");
-      
-      modal.innerHTML = `
-        <div class="bg-fondoTarjeta w-full max-w-md mx-auto rounded-md overflow-hidden shadow-2xl relative flex flex-col my-auto animate-fade-in-up border border-gray-700" onclick="event.stopPropagation()">
-          <button onclick="cerrarModal()" class="absolute top-3 right-3 bg-black/60 hover:bg-black/90 text-white rounded-full w-8 h-8 flex items-center justify-center z-30 transition border border-gray-600 shadow-lg"><i class="fa-solid fa-xmark"></i></button>
-          
-          <div class="w-full aspect-[4/3] overflow-hidden bg-fondoOscuro relative group shrink-0">
-            <img id="imagen-modal-principal" src="${window.fotosModal[0]}" class="w-full h-full object-cover object-center transition-opacity duration-300">
-            ${controles}
-          </div>
-          
-          <div class="p-6 flex flex-col text-left">
-            <p class="text-acento text-[10px] uppercase font-bold tracking-widest mb-1">${prod.categoria}</p>
-            <h3 class="text-2xl font-bold text-textoClaro mb-1">${prod.nombre}</h3>
-            <p class="text-green-400 font-bold text-2xl mb-2">${prod.precio || 'Consultar Precio'}</p>
-            ${htmlUbicacion}
-            <div class="h-[1px] w-full bg-gray-700 mb-4"></div>
-            <p class="text-textoGris text-sm mb-6 leading-relaxed">${prod.descripcion}</p>
-            <a href="https://wa.me/543755658084?text=Hola!%20Me%20gustar%C3%ADa%20consultar%20por%20la%20propiedad:%20${encodeURIComponent(prod.nombre)}" target="_blank" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded transition uppercase tracking-widest text-sm flex justify-center items-center gap-2 mt-auto shadow-lg">
-              Contactar por WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
-            </a>
-          </div>
-        </div>
-      `;
+      // 4. Inicializar Mapa Cliente si hay coordenadas
+      const divMapa = document.getElementById('contenedor-mapa-cliente');
+      if (prod.lat && prod.lng) {
+        divMapa.classList.remove('hidden');
+        
+        // Timeout breve para que el mapa calcule el tamaño del div visible
+        setTimeout(() => {
+          if(!mapaCliente) {
+            mapaCliente = L.map('mapa-cliente').setView([prod.lat, prod.lng], 16);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapaCliente);
+            markerCliente = L.marker([prod.lat, prod.lng]).addTo(mapaCliente);
+          } else {
+            mapaCliente.setView([prod.lat, prod.lng], 16);
+            if(markerCliente) mapaCliente.removeLayer(markerCliente);
+            markerCliente = L.marker([prod.lat, prod.lng]).addTo(mapaCliente);
+          }
+          mapaCliente.invalidateSize();
+        }, 100);
+      } else {
+        divMapa.classList.add('hidden'); // Si no marcó en el mapa, lo ocultamos
+      }
     }
 
-    window.cerrarModal = function() {
-      const modal = document.getElementById("modal-producto");
-      modal.classList.add("hidden"); modal.classList.remove("flex");
+    window.cerrarDetalle = function() {
+      document.getElementById('vista-detalle').classList.add('hidden');
+      document.getElementById('vista-detalle').classList.remove('flex');
+      document.getElementById('seccion-principal').classList.remove('hidden');
     }
-
-    document.getElementById("modal-producto").addEventListener('click', function(e) {
-      if(e.target === this) { window.cerrarModal(); }
-    });
 
     cargarDatos();
   </script>
