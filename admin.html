@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Gestión Inmobiliaria</title>
+  <title>Admin - insertar título</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +33,7 @@
   <div id="admin-screen" class="flex flex-col min-h-screen">
     <nav class="bg-white py-4 px-6 md:px-12 flex flex-wrap justify-between items-center border-b border-gray-200 sticky top-0 z-40 gap-4 shadow-sm">
       <div class="text-xl font-bold tracking-tight">
-        Reome <span class="font-light text-gray-500">Admin</span>
+        insertar título <span class="font-light text-gray-500">Admin</span>
       </div>
       <div class="flex flex-wrap gap-2 md:gap-3">
         <button onclick="abrirModalAnuncio()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold py-2 px-4 rounded-full transition flex items-center gap-2">
@@ -85,7 +85,8 @@
 
         <div>
           <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Descripción</label>
-          <textarea id="descripcion" required class="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl focus:border-black outline-none transition" rows="3"></textarea>
+          <!-- Se agregó break-words para evitar desbordes -->
+          <textarea id="descripcion" required class="w-full bg-gray-50 border border-gray-200 p-3 rounded-xl focus:border-black outline-none transition break-words whitespace-pre-wrap" rows="3"></textarea>
         </div>
 
         <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
@@ -115,6 +116,54 @@
     </div>
   </div>
 
+  <!-- Modal Gestor de Categorías (HTML CORREGIDO) -->
+  <div id="modal-categorias" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity">
+    <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100">
+      <button onclick="cerrarModalCategorias()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-2xl font-bold mb-4">Categorías</h3>
+      <form id="form-nueva-cat" class="flex gap-2 mb-6">
+        <input type="text" id="nueva-cat-nombre" placeholder="Ej: Terrenos, Casas..." required class="flex-1 bg-gray-50 border border-gray-200 text-black p-3 rounded-xl focus:border-black outline-none transition">
+        <button type="submit" class="bg-black hover:bg-gray-800 text-white px-5 rounded-xl transition font-bold"><i class="fa-solid fa-plus"></i></button>
+      </form>
+      <div class="max-h-64 overflow-y-auto pr-2 no-scrollbar">
+        <ul id="lista-gestion-categorias" class="flex flex-col gap-3"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Anuncios -->
+  <div id="modal-anuncio" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-8 shadow-2xl relative border border-gray-100">
+      <button onclick="cerrarModalAnuncio()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+      <h3 class="text-2xl font-bold mb-6"><i class="fa-solid fa-bullhorn text-gray-400"></i> Anuncio Emergente</h3>
+      
+      <form id="form-anuncio" class="flex flex-col gap-4">
+        <label class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
+          <input type="checkbox" id="anuncio-activo" class="w-5 h-5 accent-black">
+          <span class="text-sm font-bold text-gray-800">Mostrar este anuncio al entrar</span>
+        </label>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Título</label>
+          <input type="text" id="anuncio-titulo" class="w-full bg-gray-50 border border-gray-200 text-black p-3 rounded-xl focus:border-black outline-none transition">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Mensaje</label>
+          <textarea id="anuncio-texto" rows="4" class="w-full bg-gray-50 border border-gray-200 text-black p-3 rounded-xl focus:border-black outline-none transition break-words whitespace-pre-wrap"></textarea>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+          <label class="block text-sm font-bold text-gray-800 uppercase tracking-wide mb-2"><i class="fa-solid fa-image"></i> Imagen de Fondo (Textura)</label>
+          <input type="file" id="anuncio-imagen" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-gray-200 file:text-black">
+          <div id="preview-anuncio-bg" class="mt-3 hidden">
+            <div class="w-full h-24 rounded-lg overflow-hidden border border-gray-300 relative">
+              <img id="img-anuncio-actual" src="" class="w-full h-full object-cover opacity-50">
+            </div>
+          </div>
+        </div>
+        <button type="submit" id="btn-guardar-anuncio" class="bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-xl mt-2 transition shadow-md">Publicar Anuncio</button>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     const IMGBB_API_KEY = "ce0938ece2bee753e1fdb8725e95e854";
 
@@ -138,6 +187,7 @@
     let categorias = [];
     let urlImagenActual = ""; 
     let galeriaActual = []; 
+    let urlAnuncioActual = "";
     let mapaAdmin = null;
     let markerAdmin = null;
     let coordsGuardadas = null;
@@ -165,20 +215,52 @@
     function renderizarUI() {
       const menu = document.getElementById("menu-categorias");
       const selectCat = document.getElementById("categoria-select");
+      const listaGestion = document.getElementById("lista-gestion-categorias");
       
       menu.innerHTML = `<button onclick="filtrarAdmin('todos')" class="menu-btn menu-activo px-5 py-2 rounded-full border border-gray-200 text-sm font-medium transition hover:bg-gray-100">Todo</button>`;
       selectCat.innerHTML = ""; 
+      listaGestion.innerHTML = "";
       
       categorias.forEach(cat => {
         menu.innerHTML += `<button onclick="filtrarAdmin('${cat.nombre}')" class="menu-btn px-5 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition hover:bg-gray-100">${cat.nombre}</button>`;
         selectCat.innerHTML += `<option value="${cat.nombre}">${cat.nombre}</option>`;
+        
+        // REPARADO: Funcionalidad de lista en gestor de categorías
+        const iconOjo = cat.oculta ? 'fa-eye-slash text-gray-400' : 'fa-eye text-green-500';
+        listaGestion.innerHTML += `
+          <li class="flex justify-between items-center bg-gray-50 p-3 rounded-xl border border-gray-200">
+            <span class="${cat.oculta ? 'text-gray-400 line-through' : 'text-gray-800'} font-medium">${cat.nombre}</span>
+            <div class="flex gap-4">
+              <button onclick="toggleCategoria('${cat.id}', ${cat.oculta})" class="transition hover:scale-110"><i class="fa-solid ${iconOjo}"></i></button>
+              <button onclick="borrarCategoria('${cat.id}')" class="text-red-500 hover:text-red-700 transition hover:scale-110"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </li>`;
       });
     }
+
+    window.abrirModalCategorias = function() { document.getElementById("modal-categorias").classList.remove("hidden"); document.getElementById("modal-categorias").classList.add("flex");}
+    window.cerrarModalCategorias = function() { document.getElementById("modal-categorias").classList.add("hidden"); document.getElementById("modal-categorias").classList.remove("flex");}
+    
+    document.getElementById('form-nueva-cat').addEventListener('submit', async (e) => {
+      e.preventDefault(); const nombre = document.getElementById('nueva-cat-nombre').value.trim();
+      await addDoc(collection(db, "categorias_inmuebles"), { nombre: nombre, oculta: false });
+      document.getElementById('nueva-cat-nombre').value = ""; refrescarCategorias();
+    });
+
+    window.toggleCategoria = async function(id, estadoActual) { await updateDoc(doc(db, "categorias_inmuebles", id), { oculta: !estadoActual }); refrescarCategorias(); }
+    window.borrarCategoria = async function(id) { if(confirm("¿Seguro que querés borrar esta categoría?")) { await deleteDoc(doc(db, "categorias_inmuebles", id)); refrescarCategorias(); } }
+
 
     async function cargarProductos() {
       const querySnapshot = await getDocs(collection(db, "inmuebles"));
       productos = []; querySnapshot.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
       filtrarAdmin('todos');
+    }
+
+    // NUEVO: Función para ocultar/mostrar propiedades en index.html
+    window.togglePropiedad = async function(id, estadoActual) {
+      await updateDoc(doc(db, "inmuebles", id), { oculta: !estadoActual });
+      cargarProductos();
     }
 
     window.filtrarAdmin = function(cat) {
@@ -188,8 +270,14 @@
 
       filtrados.forEach(prod => {
         const badgeGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-2 right-2 bg-white text-black text-[10px] px-2 py-1 rounded-full shadow font-bold"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
+        
+        // Estilo de tarjeta si está oculta
+        const opacityCard = prod.oculta ? 'opacity-50 grayscale-[50%]' : '';
+        const iconOjoProd = prod.oculta ? 'fa-eye-slash text-gray-400' : 'fa-eye text-green-600';
+        const titleToggle = prod.oculta ? 'Mostrar al público' : 'Ocultar al público';
+
         grilla.innerHTML += `
-          <div class="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col shadow-sm">
+          <div class="bg-white p-4 rounded-2xl border border-gray-100 flex flex-col shadow-sm transition ${opacityCard}">
             <div class="w-full aspect-[4/3] overflow-hidden mb-3 bg-gray-100 rounded-xl relative">
               <img src="${prod.imagen}" class="w-full h-full object-cover">
               ${badgeGaleria}
@@ -198,6 +286,7 @@
             <h3 class="text-lg font-bold mb-1 leading-tight">${prod.nombre}</h3>
             <p class="text-gray-900 font-bold mb-3">$ ${prod.precio || '-'}</p>
             <div class="mt-auto flex gap-2 border-t border-gray-100 pt-3">
+              <button onclick="togglePropiedad('${prod.id}', ${prod.oculta || false})" class="w-10 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition flex items-center justify-center" title="${titleToggle}"><i class="fa-solid ${iconOjoProd}"></i></button>
               <button onclick="editarProducto('${prod.id}')" class="flex-1 bg-gray-100 hover:bg-gray-200 text-black text-xs py-2 rounded-lg transition font-medium">Editar</button>
               <button onclick="borrarProducto('${prod.id}')" class="flex-1 bg-red-50 hover:bg-red-100 text-red-600 text-xs py-2 rounded-lg transition font-medium">Borrar</button>
             </div>
@@ -230,7 +319,6 @@
       coordsGuardadas = null;
     }
 
-    // COMPRESIÓN IDÉNTICA A MANDALAS (600px / 0.60)
     const comprimirImagen = (archivo) => {
       return new Promise((resolve) => {
         const reader = new FileReader(); reader.readAsDataURL(archivo);
@@ -238,12 +326,12 @@
           const img = new Image(); img.src = event.target.result;
           img.onload = () => {
             const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 600; // Restaurado a 600px exactos
+            const MAX_WIDTH = 600; 
             const scaleSize = MAX_WIDTH / img.width;
             if (scaleSize < 1) { canvas.width = MAX_WIDTH; canvas.height = img.height * scaleSize; } 
             else { canvas.width = img.width; canvas.height = img.height; }
             const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            canvas.toBlob((blob) => { resolve(new File([blob], archivo.name, { type: 'image/jpeg' })); }, 'image/jpeg', 0.60); // Restaurado a 0.60
+            canvas.toBlob((blob) => { resolve(new File([blob], archivo.name, { type: 'image/jpeg' })); }, 'image/jpeg', 0.60); 
           };
         };
       });
@@ -331,6 +419,10 @@
         
         const galeriaFinal = [...galeriaActual, ...nuevasUrlsGaleria];
         
+        // Buscamos si la propiedad ya existía y si estaba oculta, para mantener ese estado
+        const prodExistente = productos.find(p => p.id === id);
+        const estabaOculta = prodExistente ? prodExistente.oculta : false;
+
         const datosProducto = { 
           nombre: document.getElementById('nombre').value, 
           precio: document.getElementById('precio').value, 
@@ -338,6 +430,7 @@
           descripcion: document.getElementById('descripcion').value, 
           imagen: urlFinal, 
           galeria: galeriaFinal,
+          oculta: estabaOculta,
           lat: coordsGuardadas ? coordsGuardadas.lat : null, 
           lng: coordsGuardadas ? coordsGuardadas.lng : null  
         };
@@ -346,6 +439,42 @@
         if (id) { await updateDoc(doc(db, "inmuebles", id), datosProducto); } else { await addDoc(collection(db, "inmuebles"), datosProducto); }
         cerrarModal(); cargarProductos(); 
       } catch (error) { alert("Error: " + error.message); } finally { boton.innerHTML = originalText; boton.disabled = false; }
+    });
+
+    window.abrirModalAnuncio = async function() {
+      document.getElementById("modal-anuncio").classList.remove("hidden");
+      document.getElementById("modal-anuncio").classList.add("flex");
+      try {
+        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          document.getElementById('anuncio-activo').checked = data.activo || false;
+          document.getElementById('anuncio-titulo').value = data.titulo || "";
+          document.getElementById('anuncio-texto').value = data.texto || "";
+          urlAnuncioActual = data.imagen || "";
+          if(urlAnuncioActual) {
+            document.getElementById('preview-anuncio-bg').classList.remove('hidden');
+            document.getElementById('img-anuncio-actual').src = urlAnuncioActual;
+          }
+        }
+      } catch(e) {}
+    }
+    window.cerrarModalAnuncio = function() { document.getElementById("modal-anuncio").classList.add("hidden"); document.getElementById("modal-anuncio").classList.remove("flex"); }
+
+    document.getElementById('form-anuncio').addEventListener('submit', async (e) => {
+      e.preventDefault(); const boton = document.getElementById('btn-guardar-anuncio'); const originalText = boton.innerHTML; boton.disabled = true;
+      try {
+        const archivoFoto = document.getElementById('anuncio-imagen').files[0]; let urlFinal = urlAnuncioActual; 
+        if (archivoFoto) {
+          const fotoComprimida = await comprimirImagen(archivoFoto); const formData = new FormData(); formData.append("image", fotoComprimida);
+          const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { method: "POST", body: formData });
+          const dat = await res.json(); if (dat.success) { urlFinal = dat.data.url; }
+        }
+        await setDoc(doc(db, "configuracion_inmuebles", "anuncio"), {
+          activo: document.getElementById('anuncio-activo').checked, titulo: document.getElementById('anuncio-titulo').value, texto: document.getElementById('anuncio-texto').value, imagen: urlFinal
+        });
+        cerrarModalAnuncio(); alert("Anuncio actualizado.");
+      } catch (error) {} finally { boton.innerHTML = originalText; boton.disabled = false; }
     });
   </script>
 </body>
