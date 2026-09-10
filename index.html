@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>insertar título</title>
   
+  <!-- PRECONNECT PARA ACELERAR CARGA DE IMÁGENES -->
+  <link rel="preconnect" href="https://i.ibb.co" crossorigin>
+  <link rel="dns-prefetch" href="https://i.ibb.co">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +39,6 @@
 
 <body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col antialiased">
   
-  <!-- BARRA DE NAVEGACIÓN -->
   <nav class="bg-white py-4 px-6 md:px-12 flex flex-row justify-between items-center sticky top-0 z-50 shadow-sm border-b border-gray-100">
     <div class="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2" onclick="cerrarDetalle(); window.scrollTo(0,0)">
       <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-home"></i></div>
@@ -52,22 +55,18 @@
     </a>
   </nav>
 
-  <!-- SECCIÓN PRINCIPAL -->
   <div id="seccion-principal" class="flex flex-col w-full">
     
-    <!-- HERO SECTION -->
     <header class="relative w-full h-[60vh] md:h-[70vh] px-4 md:px-12 pt-6">
-      <div class="w-full h-full relative rounded-3xl overflow-hidden shadow-sm">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80" class="w-full h-full object-cover">
-        <!-- Overlay oscuro suave -->
+      <div class="w-full h-full relative rounded-3xl overflow-hidden shadow-sm bg-gray-900">
+        <!-- Agregado fetchpriority high a la portada del sitio también -->
+        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80" fetchpriority="high" class="w-full h-full object-cover">
         <div class="absolute inset-0 bg-black/30"></div>
-        
         <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
           <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-4 leading-tight tracking-tight">Buscá alquileres y terrenos</h1>
         </div>
       </div>
 
-      <!-- Buscador Flotante -->
       <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-[90%] max-w-4xl z-20">
         <div class="bg-white rounded-full shadow-xl p-2 pl-6 flex items-center justify-between border border-gray-100">
           <div class="flex items-center gap-3 flex-1">
@@ -82,14 +81,35 @@
     <main id="seccion-catalogo" class="pt-24 pb-20 px-6 md:px-12">
       <div class="text-center mb-12">
         <h2 id="titulo-categoria" class="text-3xl font-bold capitalize mb-8 tracking-tight">Catálogo de Propiedades</h2>
-        
-        <!-- Categorías Estilo Píldora -->
         <div id="menu-categorias" class="flex flex-wrap justify-center gap-3"></div>
       </div>
 
-      <!-- Grilla de Tarjetas -->
       <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 max-w-7xl mx-auto">
-        <p class="text-center w-full col-span-full py-10 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-black text-2xl mb-2"></i><br>Cargando propiedades...</p>
+        <!-- SKELETON LOADER (Efecto de carga premium) -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
+          <div class="w-full aspect-[4/3] bg-gray-200"></div>
+          <div class="p-5">
+            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
+            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse hidden sm:block">
+          <div class="w-full aspect-[4/3] bg-gray-200"></div>
+          <div class="p-5">
+            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
+            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse hidden lg:block">
+          <div class="w-full aspect-[4/3] bg-gray-200"></div>
+          <div class="p-5">
+            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
+            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+          </div>
+        </div>
       </div>
     </main>
     
@@ -98,8 +118,6 @@
     </footer>
   </div>
 
-
-  <!-- VISTA SPA: DETALLE DE PROPIEDAD -->
   <div id="vista-detalle" class="hidden flex-col w-full bg-gray-50 pb-20">
     <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-12 py-10">
       
@@ -108,14 +126,11 @@
       </button>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        
         <div class="lg:col-span-2 flex flex-col gap-4">
           <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-sm bg-gray-200 relative">
-            <img id="detalle-img-main" src="" class="w-full h-full object-cover transition-opacity duration-300">
+            <img id="detalle-img-main" src="" fetchpriority="high" class="w-full h-full object-cover transition-opacity duration-300">
           </div>
-          <div id="detalle-galeria" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar">
-            <!-- JS lo llena -->
-          </div>
+          <div id="detalle-galeria" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar"></div>
         </div>
 
         <div class="flex flex-col">
@@ -129,7 +144,6 @@
             </div>
 
             <h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Descripción</h3>
-            <!-- BREAK-WORDS CORRIGE EL DESBORDE DE TEXTO SIN ESPACIOS -->
             <p class="text-gray-500 mb-8 whitespace-pre-wrap break-words leading-relaxed text-sm" id="detalle-desc"></p>
 
             <a id="detalle-wsp" href="#" target="_blank" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-full transition text-sm flex justify-center items-center gap-2 shadow-md">
@@ -143,19 +157,15 @@
         <h3 class="text-xl font-bold text-gray-900 mb-6">Ubicación en el Mapa</h3>
         <div id="mapa-cliente" class="w-full h-80 md:h-96 rounded-2xl overflow-hidden border border-gray-200 z-10"></div>
       </div>
-
     </div>
   </div>
 
-
-  <!-- Modal de Anuncio -->
   <div id="modal-anuncio" class="fixed inset-0 bg-black/50 backdrop-blur-md hidden items-center justify-center p-4 z-[60] transition-opacity">
     <div class="bg-white w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-gray-200 animate-fade-in-up">
       <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-30 bg-cover bg-center"></div>
       <div class="relative z-10 p-8 flex flex-col items-center text-center h-full justify-center">
         <button onclick="cerrarAnuncio()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
         <h3 id="anuncio-titulo" class="text-3xl font-bold text-gray-900 mb-4 tracking-tight leading-tight"></h3>
-        <!-- BREAK-WORDS AQUÍ TAMBIÉN PARA PREVENIR ERRORES EN EL ANUNCIO -->
         <p id="anuncio-texto" class="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap break-words mb-2"></p>
         <button onclick="cerrarAnuncio()" class="mt-8 bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full transition text-sm shadow-md">Entendido</button>
       </div>
@@ -231,7 +241,6 @@
 
     function obtenerProductosVisibles() {
       const noms = categorias.filter(c => !c.oculta).map(c => c.nombre.toLowerCase());
-      // SE EXCLUYEN LAS PROPIEDADES OCULTAS (!p.oculta)
       return productos.filter(p => noms.includes(p.categoria.toLowerCase()) && !p.oculta);
     }
 
@@ -241,7 +250,6 @@
       if(texto === "") {
         if(document.querySelectorAll(".menu-btn").length > 0) document.querySelectorAll(".menu-btn")[0].classList.add("menu-activo");
       }
-      
       const perms = obtenerProductosVisibles();
       const filtrados = perms.filter(p => p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto));
       renderizarProductos(filtrados);
@@ -254,7 +262,6 @@
         if (catNombre === "todos" && btn.innerText.toLowerCase() === "todo") btn.classList.add("menu-activo");
         else if (btn.innerText.toLowerCase() === catNombre.toLowerCase()) btn.classList.add("menu-activo");
       });
-      
       const perms = obtenerProductosVisibles();
       const filtrados = catNombre === "todos" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
       renderizarProductos(filtrados);
@@ -266,7 +273,7 @@
       
       items.forEach(prod => {
         const tarjeta = document.createElement('div');
-        tarjeta.className = "fade-in-up bg-white rounded-xl shadow-sm hover:shadow-md transition cursor-pointer group flex flex-col overflow-hidden";
+        tarjeta.className = "fade-in-up bg-white rounded-xl shadow-sm hover:shadow-md transition cursor-pointer group flex flex-col overflow-hidden border border-gray-100";
         tarjeta.onclick = () => window.abrirDetalle(prod.id);
         
         const tieneGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-3 right-3 bg-white/90 text-black rounded-full px-2 py-1 text-[10px] backdrop-blur-sm z-10 font-bold shadow-sm"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
@@ -275,7 +282,8 @@
 
         tarjeta.innerHTML = `
           <div class="w-full aspect-[4/3] relative overflow-hidden bg-gray-100 p-2">
-            <img src="${prod.imagen}" loading="lazy" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-500">
+            <!-- REEMPLAZO IMPORTANTE: Fetchpriority en lugar de Loading Lazy -->
+            <img src="${prod.imagen}" fetchpriority="high" class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-500">
             ${tieneGaleria}
           </div>
           <div class="pt-4 pb-2 px-1 flex justify-between items-start">
