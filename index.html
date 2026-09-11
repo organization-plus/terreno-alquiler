@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="bg-gray-100">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>insertar título</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estudio Jurídico</title>
   
-  <!-- PRECONNECT PARA ACELERAR CARGA DE IMÁGENES -->
   <link rel="preconnect" href="https://i.ibb.co" crossorigin>
   <link rel="dns-prefetch" href="https://i.ibb.co">
 
@@ -19,159 +18,151 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['"Inter"', 'sans-serif'], }
-        }
-      }
-    }
+    tailwind.config = { theme: { extend: { fontFamily: { sans: ['"Inter"', 'sans-serif'], } } } }
   </script>
   <style>
-    .menu-activo { background-color: #111827; color: white; border-color: #111827; }
     html { scroll-behavior: smooth; }
-    .fade-in-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-    .fade-in-up.visible { opacity: 1; transform: translateY(0); }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col antialiased">
-  
-  <nav class="bg-white py-4 px-6 md:px-12 flex flex-row justify-between items-center sticky top-0 z-50 shadow-sm border-b border-gray-100">
-    <div class="text-xl font-bold tracking-tight cursor-pointer flex items-center gap-2" onclick="cerrarDetalle(); window.scrollTo(0,0)">
-      <div class="w-6 h-6 bg-black text-white rounded-full flex items-center justify-center text-xs"><i class="fa-solid fa-home"></i></div>
-      insertar título
-    </div>
+<body class="bg-gray-100 font-sans text-black antialiased">
+
+  <!-- VISTA PRINCIPAL (CATÁLOGO) -->
+  <main id="seccion-principal" class="relative min-h-screen">
     
-    <div class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-      <a href="#" onclick="cerrarDetalle(); window.scrollTo(0,0)" class="hover:text-black transition">Inicio</a>
-      <a href="#seccion-catalogo" onclick="cerrarDetalle()" class="hover:text-black transition">Propiedades</a>
-    </div>
+    <!-- Mapa de ciudad de fondo (Si querés que se vea tu mapa, asegurate de tener mapa.jpg subido, si no se ve un gris claro muy estético) -->
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-[0.14] mix-blend-multiply grayscale" style="background-image: url('mapa.jpg')"></div>
 
-    <a href="https://wa.me/543755658084" target="_blank" class="bg-black hover:bg-gray-800 text-white text-sm font-semibold py-2 px-5 rounded-full transition flex items-center gap-2">
-      Contactar <i class="fa-brands fa-whatsapp"></i>
-    </a>
-  </nav>
+    <div class="relative z-10">
+      <!-- Navbar -->
+      <header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+        <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <div class="font-bold text-lg cursor-pointer" onclick="window.scrollTo(0,0)">insertar título</div>
+          <a href="https://wa.me/543755658084" target="_blank" class="flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800">
+            <i class="fa-brands fa-whatsapp text-lg"></i> Contacto
+          </a>
+        </nav>
+      </header>
 
-  <div id="seccion-principal" class="flex flex-col w-full">
-    
-    <header class="relative w-full h-[60vh] md:h-[70vh] px-4 md:px-12 pt-6">
-      <div class="w-full h-full relative rounded-3xl overflow-hidden shadow-sm bg-gray-900">
-        <!-- Agregado fetchpriority high a la portada del sitio también -->
-        <img src="mapa.png" fetchpriority="high" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black/30"></div>
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-white px-4">
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-center mb-4 leading-tight tracking-tight">Buscá alquileres y terrenos</h1>
-        </div>
-      </div>
+      <!-- Hero Section -->
+      <section class="mx-auto max-w-7xl px-6 pb-16 pt-24 sm:pt-32">
+        <div class="flex flex-col items-center text-center">
+          <p class="mb-5 text-sm font-medium uppercase tracking-[0.2em] text-gray-400">Estudio Jurídico</p>
+          <h1 class="max-w-4xl text-balance text-4xl font-bold leading-tight tracking-tight text-black sm:text-5xl lg:text-6xl">insertar título</h1>
+          <p class="mt-6 max-w-xl text-pretty text-base leading-relaxed text-gray-500">Asesoramiento legal integral en materia inmobiliaria, terrenos y alquileres</p>
 
-      <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 w-[90%] max-w-4xl z-20">
-        <div class="bg-white rounded-full shadow-xl p-2 pl-6 flex items-center justify-between border border-gray-100">
-          <div class="flex items-center gap-3 flex-1">
-            <i class="fa-solid fa-search text-gray-400"></i>
-            <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar" class="w-full bg-transparent text-gray-900 focus:outline-none text-sm md:text-base placeholder-gray-400 font-medium">
+          <!-- Buscador -->
+          <div class="mt-10 w-full max-w-2xl">
+            <div class="flex items-center gap-2 rounded-full bg-white p-2 shadow-xl shadow-black/10 ring-1 ring-gray-100">
+              <div class="flex flex-1 items-center gap-3 pl-4">
+                <i class="fa-solid fa-search text-gray-400"></i>
+                <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por ciudad, dirección o zona" class="w-full bg-transparent py-2 text-sm text-black placeholder:text-gray-400 focus:outline-none" />
+              </div>
+              <button onclick="buscarProducto()" class="shrink-0 rounded-full bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800">Buscar</button>
+            </div>
           </div>
-          <button class="bg-black text-white px-6 py-3 rounded-full text-sm font-bold ml-4 hover:bg-gray-800 transition">Buscar</button>
         </div>
-      </div>
+      </section>
+
+      <!-- Grilla de Propiedades -->
+      <section class="mx-auto max-w-7xl px-6 pb-24 pt-12">
+        
+        <!-- Filtros (Se llenan por JS) -->
+        <div class="mb-12 flex flex-wrap justify-center gap-2" id="menu-categorias"></div>
+
+        <div id="grilla-productos" class="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+          <!-- Skeleton Loaders -->
+          <article class="rounded-3xl bg-white p-3 shadow-sm animate-pulse"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+          <article class="rounded-3xl bg-white p-3 shadow-sm animate-pulse hidden sm:block"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+          <article class="rounded-3xl bg-white p-3 shadow-sm animate-pulse hidden lg:block"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+
+  <!-- VISTA DETALLE DE PROPIEDAD (Diseño React convertido a HTML puro) -->
+  <div id="vista-detalle" class="hidden relative z-20 min-h-screen bg-gray-100">
+    <!-- Navbar simple para detalle -->
+    <header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+      <nav class="mx-auto flex h-16 max-w-5xl items-center px-4 sm:px-6">
+        <button onclick="cerrarDetalle()" class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-black shadow-sm ring-1 ring-gray-200 transition-colors hover:bg-gray-50">
+          <i class="fa-solid fa-arrow-left"></i> Volver
+        </button>
+      </nav>
     </header>
 
-    <main id="seccion-catalogo" class="pt-24 pb-20 px-6 md:px-12">
-      <div class="text-center mb-12">
-        <h2 id="titulo-categoria" class="text-3xl font-bold capitalize mb-8 tracking-tight">Catálogo de Propiedades</h2>
-        <div id="menu-categorias" class="flex flex-wrap justify-center gap-3"></div>
+    <div class="mx-auto max-w-5xl px-4 pb-32 pt-6 sm:px-6 lg:pb-16">
+      <!-- Título y precio -->
+      <div class="mt-2">
+        <span id="detalle-cat" class="text-xs font-medium uppercase tracking-[0.15em] text-gray-400">Categoría</span>
+        <h1 id="detalle-titulo" class="mt-2 text-balance text-3xl font-bold leading-tight tracking-tight text-black sm:text-4xl">Título</h1>
+        <p id="detalle-precio" class="mt-4 text-3xl font-bold tracking-tight text-black">$0</p>
       </div>
 
-      <div id="grilla-productos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 max-w-7xl mx-auto">
-        <!-- SKELETON LOADER (Efecto de carga premium) -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse">
-          <div class="w-full aspect-[4/3] bg-gray-200"></div>
-          <div class="p-5">
-            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
-            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+      <div class="mt-6 lg:grid lg:grid-cols-[1.4fr_1fr] lg:gap-10">
+        <!-- Columna izquierda: fotos + descripción -->
+        <div>
+          <!-- Foto principal -->
+          <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200">
+            <img id="detalle-img-main" src="" alt="Vista principal" class="h-full w-full object-cover transition-opacity duration-300">
           </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse hidden sm:block">
-          <div class="w-full aspect-[4/3] bg-gray-200"></div>
-          <div class="p-5">
-            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
-            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-pulse hidden lg:block">
-          <div class="w-full aspect-[4/3] bg-gray-200"></div>
-          <div class="p-5">
-            <div class="h-3 bg-gray-200 rounded w-1/4 mb-3"></div>
-            <div class="h-5 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div class="h-8 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        </div>
-      </div>
-    </main>
-    
-    <footer class="bg-white py-8 text-center border-t border-gray-200 mt-auto">
-      <p class="text-gray-400 text-xs font-semibold uppercase tracking-widest">&copy; insertar título</p>
-    </footer>
-  </div>
 
-  <div id="vista-detalle" class="hidden flex-col w-full bg-gray-50 pb-20">
-    <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-12 py-10">
-      
-      <button onclick="cerrarDetalle()" class="text-gray-500 hover:text-black mb-8 flex items-center gap-2 transition font-bold uppercase tracking-widest text-xs bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 inline-flex">
-        <i class="fa-solid fa-arrow-left"></i> Volver al Catálogo
-      </button>
+          <!-- Miniaturas deslizables (Se llena por JS) -->
+          <div id="detalle-galeria" class="mt-3 flex gap-3 overflow-x-auto pb-2 no-scrollbar"></div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div class="lg:col-span-2 flex flex-col gap-4">
-          <div class="w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-sm bg-gray-200 relative">
-            <img id="detalle-img-main" src="" fetchpriority="high" class="w-full h-full object-cover transition-opacity duration-300">
-          </div>
-          <div id="detalle-galeria" class="flex gap-4 overflow-x-auto pb-2 no-scrollbar"></div>
-        </div>
+          <!-- Descripción y mapa -->
+          <div class="mt-8 lg:mt-10">
+            <h2 class="text-lg font-bold tracking-tight text-black mb-4">Descripción</h2>
+            <p id="detalle-desc" class="text-base leading-relaxed text-gray-600 whitespace-pre-wrap break-words"></p>
 
-        <div class="flex flex-col">
-          <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 sticky top-24">
-            <span class="text-gray-500 font-bold text-[10px] tracking-widest uppercase mb-2 block" id="detalle-cat">Categoría</span>
-            <h1 class="text-3xl font-bold text-gray-900 mb-6 leading-tight" id="detalle-titulo">Título Propiedad</h1>
-            
-            <div class="pb-6 mb-6 border-b border-gray-100">
-              <p class="text-sm text-gray-500 mb-1 font-medium">Precio de lista</p>
-              <p class="text-3xl font-bold text-black" id="detalle-precio"></p>
+            <div id="contenedor-mapa-cliente" class="hidden mt-8">
+              <h2 class="text-lg font-bold tracking-tight text-black mb-4">Ubicación</h2>
+              <div id="mapa-cliente" class="flex aspect-[16/9] w-full rounded-2xl bg-gray-200 overflow-hidden ring-1 ring-gray-200 z-10"></div>
             </div>
+          </div>
+        </div>
 
-            <h3 class="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Descripción</h3>
-            <p class="text-gray-500 mb-8 whitespace-pre-wrap break-words leading-relaxed text-sm" id="detalle-desc"></p>
-
-            <a id="detalle-wsp" href="#" target="_blank" class="w-full bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-full transition text-sm flex justify-center items-center gap-2 shadow-md">
-              Contactar <i class="fa-brands fa-whatsapp text-lg"></i>
+        <!-- Columna derecha: info + contacto (sidebar en desktop) -->
+        <div class="mt-8 lg:mt-0">
+          <div class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-200 lg:sticky lg:top-24">
+            <p class="text-base leading-relaxed text-gray-600">
+              ¿Te interesa esta propiedad? Escribinos y nuestro equipo te acompañará en todo el proceso con seguridad jurídica en cada etapa.
+            </p>
+            <!-- Botón de contacto en desktop -->
+            <a id="detalle-wsp-desktop" href="#" target="_blank" class="mt-6 hidden w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 lg:flex">
+              <i class="fa-brands fa-whatsapp text-lg"></i> Contactar
             </a>
           </div>
         </div>
       </div>
+    </div>
 
-      <div id="contenedor-mapa-cliente" class="mt-12 bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hidden">
-        <h3 class="text-xl font-bold text-gray-900 mb-6">Ubicación en el Mapa</h3>
-        <div id="mapa-cliente" class="w-full h-80 md:h-96 rounded-2xl overflow-hidden border border-gray-200 z-10"></div>
-      </div>
+    <!-- Botón de contacto fijo en móvil (El golazo para celulares) -->
+    <div class="fixed inset-x-0 bottom-0 z-50 border-t border-gray-200 bg-white/90 p-4 backdrop-blur-md lg:hidden">
+      <a id="detalle-wsp-mobile" href="#" target="_blank" class="flex w-full items-center justify-center gap-2 rounded-full bg-black px-6 py-4 text-base font-medium text-white transition-colors hover:bg-gray-800 shadow-lg">
+        <i class="fa-brands fa-whatsapp text-xl"></i> Contactar
+      </a>
     </div>
   </div>
 
+  <!-- Modal de Anuncio (Oculto si no hay anuncio activo) -->
   <div id="modal-anuncio" class="fixed inset-0 bg-black/50 backdrop-blur-md hidden items-center justify-center p-4 z-[60] transition-opacity">
-    <div class="bg-white w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-gray-200 animate-fade-in-up">
-      <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-30 bg-cover bg-center"></div>
+    <div class="bg-white w-full max-w-lg mx-auto rounded-3xl overflow-hidden shadow-2xl relative flex flex-col min-h-[300px] border border-gray-200">
+      <div id="anuncio-bg" class="absolute inset-0 z-0 opacity-20 bg-cover bg-center"></div>
       <div class="relative z-10 p-8 flex flex-col items-center text-center h-full justify-center">
         <button onclick="cerrarAnuncio()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
         <h3 id="anuncio-titulo" class="text-3xl font-bold text-gray-900 mb-4 tracking-tight leading-tight"></h3>
         <p id="anuncio-texto" class="text-gray-700 text-base md:text-lg leading-relaxed whitespace-pre-wrap break-words mb-2"></p>
-        <button onclick="cerrarAnuncio()" class="mt-8 bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-full transition text-sm shadow-md">Entendido</button>
+        <button onclick="cerrarAnuncio()" class="mt-8 bg-black hover:bg-gray-800 text-white font-medium py-3 px-8 rounded-full transition text-sm">Entendido</button>
       </div>
     </div>
   </div>
 
+
+  <!-- LÓGICA FUNCIONAL FIREBASE -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -188,14 +179,8 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    let productos = [];
-    let categorias = [];
-    let mapaCliente = null; 
-    let markerCliente = null;
-
-    const observador = new IntersectionObserver((entradas) => {
-      entradas.forEach(entrada => { if (entrada.isIntersecting) { entrada.target.classList.add('visible'); } });
-    }, { threshold: 0.1 });
+    let productos = []; let categorias = []; let mapaCliente = null; let markerCliente = null;
+    let fotosUnicasActuales = [];
 
     async function cargarDatos() {
       const catSnap = await getDocs(collection(db, "categorias_inmuebles"));
@@ -204,7 +189,7 @@
       const prodSnap = await getDocs(collection(db, "inmuebles"));
       prodSnap.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
       
-      renderizarMenu(); filtrar('todos'); cargarAnuncio();
+      renderizarMenu(); filtrar('todo'); cargarAnuncio();
     }
 
     async function cargarAnuncio() {
@@ -217,25 +202,23 @@
             document.getElementById('anuncio-titulo').innerText = data.titulo;
             document.getElementById('anuncio-texto').innerText = data.texto;
             if (data.imagen) document.getElementById('anuncio-bg').style.backgroundImage = `url('${data.imagen}')`;
-            document.getElementById('modal-anuncio').classList.remove('hidden');
-            document.getElementById('modal-anuncio').classList.add('flex');
+            document.getElementById('modal-anuncio').classList.remove('hidden'); document.getElementById('modal-anuncio').classList.add('flex');
           }
         }
       } catch (e) {}
     }
 
     window.cerrarAnuncio = function() {
-      document.getElementById('modal-anuncio').classList.add('hidden');
-      document.getElementById('modal-anuncio').classList.remove('flex');
+      document.getElementById('modal-anuncio').classList.add('hidden'); document.getElementById('modal-anuncio').classList.remove('flex');
       sessionStorage.setItem("anuncioVisto_inm", "true");
     }
 
     function renderizarMenu() {
       const menu = document.getElementById("menu-categorias");
-      menu.innerHTML = `<button onclick="filtrar('todos')" class="menu-btn menu-activo px-6 py-2 rounded-full border border-gray-200 text-sm font-medium transition hover:bg-gray-100">Todo</button>`;
+      menu.innerHTML = `<button onclick="filtrar('todo')" class="filter-btn rounded-full bg-black px-6 py-2.5 text-sm font-medium text-white transition-colors" data-filter="todo">Todo</button>`;
       const catVisibles = categorias.filter(cat => !cat.oculta);
       catVisibles.forEach(cat => {
-        menu.innerHTML += `<button onclick="filtrar('${cat.nombre}')" class="menu-btn px-6 py-2 rounded-full border border-gray-200 text-sm font-medium text-gray-600 transition hover:bg-gray-100">${cat.nombre}</button>`;
+        menu.innerHTML += `<button onclick="filtrar('${cat.nombre}')" class="filter-btn rounded-full bg-white px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-colors hover:bg-gray-50 ring-1 ring-gray-100" data-filter="${cat.nombre}">${cat.nombre}</button>`;
       });
     }
 
@@ -246,72 +229,80 @@
 
     window.buscarProducto = function() {
       const texto = document.getElementById("buscador").value.toLowerCase();
-      document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("menu-activo"));
+      
       if(texto === "") {
-        if(document.querySelectorAll(".menu-btn").length > 0) document.querySelectorAll(".menu-btn")[0].classList.add("menu-activo");
+        filtrar('todo');
+        return;
       }
+      
+      // Apagar todos los botones visualmente si busca escribiendo
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.className = 'filter-btn rounded-full bg-white px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-colors hover:bg-gray-50 ring-1 ring-gray-100';
+      });
+
       const perms = obtenerProductosVisibles();
-      const filtrados = perms.filter(p => p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto));
+      const filtrados = perms.filter(p => p.nombre.toLowerCase().includes(texto) || p.descripcion.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto));
       renderizarProductos(filtrados);
     }
 
     window.filtrar = function(catNombre) {
       document.getElementById("buscador").value = ""; 
-      document.querySelectorAll(".menu-btn").forEach(btn => {
-        btn.classList.remove("menu-activo");
-        if (catNombre === "todos" && btn.innerText.toLowerCase() === "todo") btn.classList.add("menu-activo");
-        else if (btn.innerText.toLowerCase() === catNombre.toLowerCase()) btn.classList.add("menu-activo");
+      
+      // Estilo de botones estilo React
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if(btn.dataset.filter.toLowerCase() === catNombre.toLowerCase()) {
+          btn.className = 'filter-btn rounded-full bg-black px-6 py-2.5 text-sm font-medium text-white transition-colors';
+        } else {
+          btn.className = 'filter-btn rounded-full bg-white px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-colors hover:bg-gray-50 ring-1 ring-gray-100';
+        }
       });
+
       const perms = obtenerProductosVisibles();
-      const filtrados = catNombre === "todos" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
+      const filtrados = catNombre.toLowerCase() === "todo" ? perms : perms.filter(p => p.categoria.toLowerCase() === catNombre.toLowerCase());
       renderizarProductos(filtrados);
     }
 
     function renderizarProductos(items) {
       const grilla = document.getElementById("grilla-productos"); grilla.innerHTML = "";
-      if (items.length === 0) { grilla.innerHTML = `<p class="text-gray-500 text-center col-span-full py-10">No se encontraron resultados.</p>`; return; }
+      if (items.length === 0) { grilla.innerHTML = `<p class="text-gray-500 text-center col-span-full py-10">No se encontraron propiedades.</p>`; return; }
       
-      // Agregamos el 'index' para saber en qué número de tarjeta estamos
       items.forEach((prod, index) => {
-        const tarjeta = document.createElement('div');
-        tarjeta.className = "fade-in-up bg-white rounded-xl shadow-sm hover:shadow-md transition cursor-pointer group flex flex-col overflow-hidden border border-gray-100";
+        const tarjeta = document.createElement('article');
+        tarjeta.className = "group cursor-pointer rounded-3xl bg-white p-3 shadow-sm ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 flex flex-col";
         tarjeta.onclick = () => window.abrirDetalle(prod.id);
         
-        const tieneGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-3 right-3 bg-white/90 text-black rounded-full px-2 py-1 text-[10px] backdrop-blur-sm z-10 font-bold shadow-sm"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
-        const indicadorMapa = (prod.lat && prod.lng) ? `<div class="text-gray-400 text-xs mt-1 flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> Ver en mapa</div>` : '';
         const precioMostrado = prod.precio ? `$${prod.precio}` : 'Consultar';
-
-        // LÓGICA HÍBRIDA DE VELOCIDAD: 
-        // Si es una de las primeras 6 tarjetas, máxima prioridad. Si es la 7 en adelante, carga diferida (lazy).
-        const atributosImagen = index < 6 
-          ? 'fetchpriority="high"' 
-          : 'loading="lazy"';
+        const atributosImagen = index < 6 ? 'fetchpriority="high"' : 'loading="lazy"';
+        const indicadorGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-3 right-3 rounded-full bg-white/90 px-2 py-1 text-[10px] font-bold text-black shadow-sm backdrop-blur-sm"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
 
         tarjeta.innerHTML = `
-          <div class="w-full aspect-[4/3] relative overflow-hidden bg-gray-100 p-2">
-            <!-- Aplicamos la lógica híbrida aquí -->
-            <img src="${prod.imagen}" ${atributosImagen} class="w-full h-full object-cover rounded-lg group-hover:scale-105 transition duration-500">
-            ${tieneGaleria}
+          <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 relative">
+            <img src="${prod.imagen}" ${atributosImagen} alt="${prod.nombre}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            ${indicadorGaleria}
           </div>
-          <div class="pt-4 pb-2 px-1 flex justify-between items-start">
-            <div class="flex-1 pr-4">
-              <h3 class="font-bold text-gray-900 text-lg leading-tight group-hover:text-black transition line-clamp-1">${prod.nombre}</h3>
-              <p class="text-gray-400 text-sm mt-1 line-clamp-1">${prod.categoria}</p>
-              ${indicadorMapa}
-            </div>
-            <div class="text-right shrink-0">
-              <p class="text-black font-bold text-lg">${precioMostrado}</p>
-            </div>
+          <div class="px-2 pb-2 pt-4 flex-1 flex flex-col">
+            <span class="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">${prod.categoria}</span>
+            <h3 class="text-lg font-bold tracking-tight text-black leading-tight line-clamp-2">${prod.nombre}</h3>
+            <p class="mt-auto pt-3 text-2xl font-bold tracking-tight text-black">${precioMostrado}</p>
           </div>
         `;
-        grilla.appendChild(tarjeta); observador.observe(tarjeta);
+        grilla.appendChild(tarjeta);
       });
     }
 
-    window.cambiarFotoDetalle = function(url) {
+    window.cambiarFotoDetalle = function(url, indexBoton) {
       const imgContenedor = document.getElementById('detalle-img-main');
       imgContenedor.style.opacity = '0.4';
       setTimeout(() => { imgContenedor.src = url; imgContenedor.style.opacity = '1'; }, 150);
+      
+      // Actualizar el borde negro en las miniaturas
+      document.querySelectorAll('.btn-miniatura').forEach((btn, i) => {
+        if(i === indexBoton) {
+          btn.classList.remove('ring-1', 'ring-gray-200'); btn.classList.add('ring-2', 'ring-black');
+        } else {
+          btn.classList.remove('ring-2', 'ring-black'); btn.classList.add('ring-1', 'ring-gray-200');
+        }
+      });
     }
 
     window.abrirDetalle = function(id) {
@@ -319,7 +310,7 @@
 
       document.getElementById('seccion-principal').classList.add('hidden');
       document.getElementById('vista-detalle').classList.remove('hidden');
-      document.getElementById('vista-detalle').classList.add('flex');
+      document.getElementById('vista-detalle').classList.add('block');
       window.scrollTo(0,0);
 
       document.getElementById('detalle-cat').innerText = prod.categoria;
@@ -328,20 +319,23 @@
       document.getElementById('detalle-desc').innerText = prod.descripcion;
       
       const textoWsp = `Hola! Me gustaría consultar por la propiedad: ${prod.nombre}`;
-      document.getElementById('detalle-wsp').href = `https://wa.me/543755658084?text=${encodeURIComponent(textoWsp)}`;
+      const linkWsp = `https://wa.me/543755658084?text=${encodeURIComponent(textoWsp)}`;
+      document.getElementById('detalle-wsp-desktop').href = linkWsp;
+      document.getElementById('detalle-wsp-mobile').href = linkWsp;
 
       const todasLasFotos = [prod.imagen, ...(prod.galeria || [])];
-      const fotosUnicas = [...new Set(todasLasFotos)];
+      fotosUnicasActuales = [...new Set(todasLasFotos)];
       
-      document.getElementById('detalle-img-main').src = fotosUnicas[0];
+      document.getElementById('detalle-img-main').src = fotosUnicasActuales[0];
       const galeriaContenedor = document.getElementById('detalle-galeria'); galeriaContenedor.innerHTML = "";
       
-      if (fotosUnicas.length > 1) {
-        fotosUnicas.forEach(url => {
+      if (fotosUnicasActuales.length > 1) {
+        fotosUnicasActuales.forEach((url, i) => {
+          const clasesBorde = i === 0 ? "ring-2 ring-black" : "ring-1 ring-gray-200 hover:ring-gray-300";
           galeriaContenedor.innerHTML += `
-            <div onclick="cambiarFotoDetalle('${url}')" class="w-24 h-24 shrink-0 rounded-2xl overflow-hidden border border-gray-200 cursor-pointer hover:opacity-80 transition bg-gray-100">
-              <img src="${url}" class="w-full h-full object-cover">
-            </div>`;
+            <button type="button" onclick="cambiarFotoDetalle('${url}', ${i})" class="btn-miniatura relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl bg-white transition-all ${clasesBorde}" aria-label="Ver foto ${i + 1}">
+              <img src="${url}" class="h-full w-full object-cover">
+            </button>`;
         });
       }
 
@@ -365,7 +359,7 @@
 
     window.cerrarDetalle = function() {
       document.getElementById('vista-detalle').classList.add('hidden');
-      document.getElementById('vista-detalle').classList.remove('flex');
+      document.getElementById('vista-detalle').classList.remove('block');
       document.getElementById('seccion-principal').classList.remove('hidden');
     }
 
