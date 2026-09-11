@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="bg-gray-50">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -27,25 +27,28 @@
   </style>
 </head>
 
-<body class="bg-gray-50 font-sans text-black antialiased">
+<body class="font-sans text-black antialiased">
+
+  <!-- FONDO GLOBAL (MAPA VISIBLE EN TODAS LAS PANTALLAS) -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <!-- El mapa en opacidad media y tonos grises para que no moleste a la vista -->
+    <div class="absolute inset-0 bg-cover bg-center opacity-30 grayscale" style="background-image: url('mapa.jpg')"></div>
+    <!-- Capa sutil de blanco encima para asegurar que los textos negros resalten perfecto -->
+    <div class="absolute inset-0 bg-white/70"></div>
+    <!-- Mini textura de puntos sutiles para darle estilo de diseño arquitectónico -->
+    <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px;"></div>
+  </div>
 
   <!-- VISTA PRINCIPAL (CATÁLOGO) -->
-  <main id="seccion-principal" class="relative min-h-screen">
+  <main id="seccion-principal" class="relative z-10 min-h-screen">
     
-    <!-- FONDO ESTÉTICO MULTICAPA PREMIUM -->
-    <!-- 1. Mapa base con opacidad media -->
-    <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 bg-cover bg-center opacity-30 grayscale contrast-125" style="background-image: url('mapa.jpg')"></div>
-    <!-- 2. Gradiente blanco para suavizar -->
-    <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 bg-gradient-to-b from-white/40 via-white/70 to-gray-50/95"></div>
-    <!-- 3. Trama de puntos (Dot Grid) -->
-    <div aria-hidden="true" class="pointer-events-none fixed inset-0 z-0 opacity-40" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px;"></div>
-    <!-- 4. Resplandor (Glow) detrás del título -->
-    <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-0 -translate-x-1/2 w-[800px] h-[500px] bg-gray-200/60 blur-[120px] rounded-full"></div>
+    <!-- Resplandor sutil detrás del título principal -->
+    <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-0 -translate-x-1/2 w-[800px] h-[500px] bg-gray-100/60 blur-[120px] rounded-full"></div>
 
     <div class="relative z-10">
       
-      <!-- Navbar (Sin el título, solo botón) -->
-      <header class="sticky top-0 z-50 w-full border-b border-gray-100 bg-white/80 backdrop-blur-md">
+      <!-- Navbar (Solo botón de contacto) -->
+      <header class="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md shadow-sm">
         <nav class="mx-auto flex h-16 max-w-7xl items-center justify-end px-6">
           <a href="https://wa.me/543755658084" target="_blank" class="flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 shadow-md">
             <i class="fa-brands fa-whatsapp text-lg"></i> Contacto
@@ -56,7 +59,7 @@
       <!-- Hero Section -->
       <section class="mx-auto max-w-7xl px-6 pb-16 pt-24 sm:pt-32">
         <div class="flex flex-col items-center text-center relative z-20">
-          <p class="mb-5 text-sm font-bold uppercase tracking-[0.2em] text-gray-500 bg-white/50 px-4 py-1 rounded-full border border-gray-200/50 backdrop-blur-sm">Estudio Jurídico</p>
+          <p class="mb-5 text-sm font-bold uppercase tracking-[0.2em] text-gray-500 bg-white/60 px-4 py-1 rounded-full border border-gray-200/50 backdrop-blur-sm">Estudio Jurídico</p>
           <h1 class="max-w-4xl text-balance text-5xl font-bold leading-tight tracking-tight text-black sm:text-6xl lg:text-7xl drop-shadow-sm">
             Hasan y asociados
           </h1>
@@ -66,7 +69,7 @@
 
           <!-- Buscador flotante -->
           <div class="mt-12 w-full max-w-2xl">
-            <div class="flex items-center gap-2 rounded-full bg-white/90 backdrop-blur-md p-2 shadow-xl shadow-black/5 ring-1 ring-gray-200/50 transition-all focus-within:shadow-2xl focus-within:ring-gray-300">
+            <div class="flex items-center gap-2 rounded-full bg-white/95 backdrop-blur-md p-2 shadow-xl shadow-black/5 ring-1 ring-gray-200/50 transition-all focus-within:shadow-2xl focus-within:ring-gray-300">
               <div class="flex flex-1 items-center gap-3 pl-4">
                 <i class="fa-solid fa-search text-gray-400"></i>
                 <input type="text" id="buscador" onkeyup="buscarProducto()" placeholder="Buscar por ciudad, dirección o zona" class="w-full bg-transparent py-2 text-sm text-black placeholder:text-gray-400 focus:outline-none font-medium" />
@@ -93,10 +96,10 @@
   </main>
 
 
-  <!-- VISTA DETALLE DE PROPIEDAD -->
-  <div id="vista-detalle" class="hidden relative z-30 min-h-screen bg-gray-50 pb-24">
+  <!-- VISTA DETALLE DE PROPIEDAD (Con el mismo mapa de fondo global transparente) -->
+  <div id="vista-detalle" class="hidden relative z-10 min-h-screen pb-24">
     <!-- Navbar simple para detalle -->
-    <header class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/90 backdrop-blur-md shadow-sm">
+    <header class="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md shadow-sm">
       <nav class="mx-auto flex h-16 max-w-5xl items-center px-4 sm:px-6">
         <button onclick="cerrarDetalle()" class="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-gray-700 shadow-sm ring-1 ring-gray-200 transition-all hover:bg-gray-50 hover:text-black">
           <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
@@ -107,7 +110,7 @@
     <div class="mx-auto max-w-5xl px-4 pt-8 sm:px-6">
       
       <!-- Título y precio -->
-      <div class="mt-2 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+      <div class="mt-2 bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-3xl shadow-sm border border-gray-200/60">
         <span id="detalle-cat" class="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 bg-gray-100 px-3 py-1 rounded-full">Categoría</span>
         <h1 id="detalle-titulo" class="mt-4 text-balance text-3xl font-bold leading-tight tracking-tight text-black sm:text-4xl md:text-5xl">Título</h1>
         <p id="detalle-precio" class="mt-4 text-3xl font-bold tracking-tight text-black border-t border-gray-100 pt-4">$0</p>
@@ -117,7 +120,7 @@
         <!-- Columna izquierda: fotos + mapa -->
         <div class="flex flex-col gap-8">
           
-          <div class="bg-white p-3 rounded-3xl shadow-sm border border-gray-100">
+          <div class="bg-white/95 backdrop-blur-sm p-3 rounded-3xl shadow-sm border border-gray-200/60">
             <!-- Foto principal -->
             <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 relative">
               <img id="detalle-img-main" src="" alt="Vista principal" class="h-full w-full object-cover transition-opacity duration-300">
@@ -127,13 +130,13 @@
           </div>
 
           <!-- Descripción -->
-          <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+          <div class="bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-3xl shadow-sm border border-gray-200/60">
             <h2 class="text-xl font-bold tracking-tight text-black mb-4 flex items-center gap-2"><i class="fa-solid fa-align-left text-gray-400"></i> Detalles de la propiedad</h2>
-            <p id="detalle-desc" class="text-base leading-relaxed text-gray-600 whitespace-pre-wrap break-words"></p>
+            <p id="detalle-desc" class="text-base leading-relaxed text-gray-700 whitespace-pre-wrap break-words"></p>
           </div>
 
           <!-- Mapa -->
-          <div id="contenedor-mapa-cliente" class="hidden bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
+          <div id="contenedor-mapa-cliente" class="hidden bg-white/95 backdrop-blur-sm p-6 md:p-8 rounded-3xl shadow-sm border border-gray-200/60">
             <h2 class="text-xl font-bold tracking-tight text-black mb-4 flex items-center gap-2"><i class="fa-solid fa-map-location-dot text-gray-400"></i> Ubicación</h2>
             <div id="mapa-cliente" class="flex aspect-[16/9] w-full rounded-2xl bg-gray-200 overflow-hidden ring-1 ring-gray-200 z-10"></div>
           </div>
@@ -141,14 +144,13 @@
 
         <!-- Columna derecha: Tarjeta flotante de contacto (Desktop) -->
         <div class="mt-8 lg:mt-0">
-          <div class="rounded-3xl bg-white p-8 shadow-xl shadow-black/5 border border-gray-100 lg:sticky lg:top-24 text-center">
-            <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-100">
-              <i class="fa-solid fa-building-shield text-2xl text-black"></i>
-            </div>
-            <h3 class="text-lg font-bold text-black mb-2">Asesoría Profesional</h3>
-            <p class="text-sm leading-relaxed text-gray-500 mb-8">
+          <div class="rounded-3xl bg-white/95 backdrop-blur-sm p-8 shadow-xl shadow-black/5 border border-gray-200/60 lg:sticky lg:top-24 text-center">
+            
+            <!-- Texto simplificado sin el logo del edificio -->
+            <p class="text-base font-medium leading-relaxed text-gray-700 mb-8">
               ¿Te interesa? Escribinos y te asesoramos.
             </p>
+            
             <a id="detalle-wsp-desktop" href="#" target="_blank" class="hidden w-full items-center justify-center gap-3 rounded-full bg-black px-6 py-4 text-sm font-bold text-white transition-all hover:bg-gray-800 hover:-translate-y-1 shadow-lg lg:flex">
               <i class="fa-brands fa-whatsapp text-xl"></i> Contactar al Estudio
             </a>
@@ -236,7 +238,7 @@
       menu.innerHTML = `<button onclick="filtrar('todo')" class="filter-btn rounded-full bg-black px-6 py-2.5 text-sm font-bold text-white transition-all shadow-md" data-filter="todo">Todo</button>`;
       const catVisibles = categorias.filter(cat => !cat.oculta);
       catVisibles.forEach(cat => {
-        menu.innerHTML += `<button onclick="filtrar('${cat.nombre}')" class="filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200" data-filter="${cat.nombre}">${cat.nombre}</button>`;
+        menu.innerHTML += `<button onclick="filtrar('${cat.nombre}')" class="filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200" data-filter="${cat.nombre}">${cat.nombre}</button>`;
       });
     }
 
@@ -254,7 +256,7 @@
       }
       
       document.querySelectorAll('.filter-btn').forEach(b => {
-        b.className = 'filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200';
+        b.className = 'filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200';
       });
 
       const perms = obtenerProductosVisibles();
@@ -269,7 +271,7 @@
         if(btn.dataset.filter.toLowerCase() === catNombre.toLowerCase()) {
           btn.className = 'filter-btn rounded-full bg-black px-6 py-2.5 text-sm font-bold text-white transition-all shadow-md';
         } else {
-          btn.className = 'filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-600 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200';
+          btn.className = 'filter-btn rounded-full bg-white/80 backdrop-blur-sm px-6 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-white ring-1 ring-gray-200';
         }
       });
 
@@ -284,7 +286,8 @@
       
       items.forEach((prod, index) => {
         const tarjeta = document.createElement('article');
-        tarjeta.className = "group cursor-pointer rounded-3xl bg-white/90 backdrop-blur-sm p-3 shadow-md shadow-black/5 ring-1 ring-gray-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:bg-white flex flex-col";
+        // El fondo es apenas transparente para que el mapa se sienta conectado a la tarjeta
+        tarjeta.className = "group cursor-pointer rounded-3xl bg-white/95 backdrop-blur-sm p-3 shadow-md shadow-black/5 ring-1 ring-gray-200/60 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col";
         tarjeta.onclick = () => window.abrirDetalle(prod.id);
         
         const precioMostrado = prod.precio ? `$${prod.precio}` : 'Consultar';
@@ -297,7 +300,7 @@
             ${indicadorGaleria}
           </div>
           <div class="px-3 pb-3 pt-5 flex-1 flex flex-col">
-            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-2">${prod.categoria}</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-2">${prod.categoria}</span>
             <h3 class="text-xl font-bold tracking-tight text-black leading-tight line-clamp-2">${prod.nombre}</h3>
             <p class="mt-auto pt-4 text-2xl font-black tracking-tight text-black">${precioMostrado}</p>
           </div>
