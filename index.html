@@ -329,7 +329,7 @@
       document.getElementById('detalle-precio').innerText = prod.precio ? `$ ${prod.precio}` : 'Consultar';
       document.getElementById('detalle-desc').innerText = prod.descripcion;
       
-      const textoWsp = `Hola Estudio Hasan y Asociados! Me gustaría consultar por la propiedad: ${prod.nombre}`;
+      const textoWsp = `Hola, Me gustaría consultar por: ${prod.categoria}: ${prod.nombre}.`;
       const linkWsp = `https://wa.me/543755658084?text=${encodeURIComponent(textoWsp)}`;
       document.getElementById('detalle-wsp-desktop').href = linkWsp;
       document.getElementById('detalle-wsp-mobile').href = linkWsp;
