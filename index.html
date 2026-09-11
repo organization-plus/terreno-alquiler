@@ -27,22 +27,27 @@
   </style>
 </head>
 
-<body class="font-sans text-black antialiased">
+<body class="font-sans text-black antialiased bg-gray-50">
 
-  <!-- FONDO GLOBAL (MAPA VISIBLE EN TODAS LAS PANTALLAS) -->
+  <!-- FONDO GLOBAL (MAPA VISIBLE EN TODAS LAS PANTALLAS CON DEGRADADO) -->
   <div class="fixed inset-0 z-0 pointer-events-none">
-    <!-- El mapa en opacidad media y tonos grises para que no moleste a la vista -->
+    <!-- El mapa en opacidad media y tonos grises -->
     <div class="absolute inset-0 bg-cover bg-center opacity-30 grayscale" style="background-image: url('mapa.jpg')"></div>
-    <!-- Capa sutil de blanco encima para asegurar que los textos negros resalten perfecto -->
+    
+    <!-- Capa sutil de blanco encima para asegurar que los textos resalten -->
     <div class="absolute inset-0 bg-white/70"></div>
-    <!-- Mini textura de puntos sutiles para darle estilo de diseño arquitectónico -->
+    
+    <!-- Mini textura de puntos sutiles -->
     <div class="absolute inset-0 opacity-40" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px;"></div>
+    
+    <!-- EFECTO VIÑETA: Degradado hacia un gris más oscuro en los bordes -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-transparent via-transparent to-gray-400/60 mix-blend-multiply"></div>
   </div>
 
   <!-- VISTA PRINCIPAL (CATÁLOGO) -->
   <main id="seccion-principal" class="relative z-10 min-h-screen">
     
-    <!-- Resplandor sutil detrás del título principal -->
+    <!-- Resplandor sutil detrás del título principal para separarlo del fondo -->
     <div aria-hidden="true" class="pointer-events-none absolute left-1/2 top-0 z-0 -translate-x-1/2 w-[800px] h-[500px] bg-gray-100/60 blur-[120px] rounded-full"></div>
 
     <div class="relative z-10">
@@ -96,7 +101,7 @@
   </main>
 
 
-  <!-- VISTA DETALLE DE PROPIEDAD (Con el mismo mapa de fondo global transparente) -->
+  <!-- VISTA DETALLE DE PROPIEDAD -->
   <div id="vista-detalle" class="hidden relative z-10 min-h-screen pb-24">
     <!-- Navbar simple para detalle -->
     <header class="sticky top-0 z-50 w-full border-b border-gray-200/50 bg-white/80 backdrop-blur-md shadow-sm">
@@ -146,7 +151,6 @@
         <div class="mt-8 lg:mt-0">
           <div class="rounded-3xl bg-white/95 backdrop-blur-sm p-8 shadow-xl shadow-black/5 border border-gray-200/60 lg:sticky lg:top-24 text-center">
             
-            <!-- Texto simplificado sin el logo del edificio -->
             <p class="text-base font-medium leading-relaxed text-gray-700 mb-8">
               ¿Te interesa? Escribinos y te asesoramos.
             </p>
@@ -286,7 +290,6 @@
       
       items.forEach((prod, index) => {
         const tarjeta = document.createElement('article');
-        // El fondo es apenas transparente para que el mapa se sienta conectado a la tarjeta
         tarjeta.className = "group cursor-pointer rounded-3xl bg-white/95 backdrop-blur-sm p-3 shadow-md shadow-black/5 ring-1 ring-gray-200/60 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl flex flex-col";
         tarjeta.onclick = () => window.abrirDetalle(prod.id);
         
