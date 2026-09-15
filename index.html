@@ -29,11 +29,23 @@
 
 <body class="font-sans text-black antialiased bg-gray-50 min-h-screen">
 
+  <!-- SPLASH SCREEN: Cortina Divisoria -->
+  <div id="splash-screen" class="fixed inset-0 z-[9999] pointer-events-none overflow-hidden flex items-center justify-center">
+    <!-- Cortina Superior -->
+    <div id="curtain-top" class="absolute top-0 left-0 w-full h-1/2 bg-white transition-transform duration-[1000ms] ease-in-out z-10 border-b border-gray-100"></div>
+    
+    <!-- Cortina Inferior -->
+    <div id="curtain-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-white transition-transform duration-[1000ms] ease-in-out z-10 border-t border-gray-100"></div>
+    
+    <!-- Contenedor del Logo -->
+    <div id="splash-logo" class="relative z-20 transition-all duration-700 ease-in-out transform">
+      <img src="logo.jpg" alt="Hasan y Asociados" class="w-40 md:w-56 drop-shadow-xl mix-blend-multiply">
+    </div>
+  </div>
+
   <!-- FONDO DE MAPA MINIMALISTA -->
   <div class="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
-    <!-- Carga tu imagen generada por IA (mapa-fondo.jpg) con solo 15% de opacidad -->
     <div class="absolute inset-0 bg-cover bg-center opacity-[0.25]" style="background-image: url('mapa-fondo.jpg')"></div>
-    <!-- Capa sutil de desenfoque para suavizar las líneas aún más -->
     <div class="absolute inset-0 bg-white/40 backdrop-blur-[1px]"></div>
   </div>
 
@@ -203,7 +215,34 @@
       const prodSnap = await getDocs(collection(db, "inmuebles"));
       prodSnap.forEach((doc) => { productos.push({ id: doc.id, ...doc.data() }); });
       
-      renderizarMenu(); filtrar('todo'); cargarAnuncio();
+      renderizarMenu(); filtrar('todo'); 
+      
+      // Llamamos a la animación de la cortina
+      quitarSplashScreen();
+    }
+
+    function quitarSplashScreen() {
+      const logo = document.getElementById('splash-logo');
+      const curtainTop = document.getElementById('curtain-top');
+      const curtainBottom = document.getElementById('curtain-bottom');
+      const splashScreen = document.getElementById('splash-screen');
+
+      // 1. El logo se desvanece suavemente
+      setTimeout(() => {
+        logo.classList.add('opacity-0', 'scale-90');
+      }, 600);
+
+      // 2. Las cortinas se abren
+      setTimeout(() => {
+        curtainTop.classList.add('-translate-y-full');
+        curtainBottom.classList.add('translate-y-full');
+      }, 1100);
+
+      // 3. Destruir el contenedor y mostrar anuncio si lo hay
+      setTimeout(() => {
+        splashScreen.style.display = 'none';
+        cargarAnuncio(); // Recién cuando se abrió la cortina mostramos el anuncio
+      }, 2100);
     }
 
     async function cargarAnuncio() {
