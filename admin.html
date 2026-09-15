@@ -312,7 +312,6 @@
       coordsGuardadas = null;
     }
 
-    // --- LA MAGIA DE MANDALAS ADAPTADA PARA INMUEBLES (4:3) ---
     const comprimirImagen = (archivo) => {
       return new Promise((resolve) => {
         const reader = new FileReader(); 
@@ -324,7 +323,6 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            // Recorte forzado a formato horizontal (4:3) ideal para casas y terrenos
             const anchoObjetivo = 800;
             const altoObjetivo = 600;
             canvas.width = anchoObjetivo;
@@ -348,7 +346,6 @@
 
             ctx.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, anchoObjetivo, altoObjetivo);
             
-            // Conversión y compresión a WebP 75%
             canvas.toBlob((blob) => { 
               const nuevoNombre = archivo.name.replace(/\.[^/.]+$/, "") + ".webp";
               resolve(new File([blob], nuevoNombre, { type: 'image/webp' })); 
@@ -358,13 +355,13 @@
       });
     };
 
-    // --- CONEXIÓN DIRECTA A TU NUEVO CLOUDINARY ---
+    // --- AQUÍ ESTÁ EL ENLACE CORREGIDO APUNTANDO A "ufc2tjqy" ---
     async function subirACloudinary(archivo) {
       const formData = new FormData();
       formData.append('file', archivo);
       formData.append('upload_preset', 'estudio-juridico'); 
 
-      const response = await fetch('https://api.cloudinary.com/v1_1/ml_estudiojuridico/image/upload', {
+      const response = await fetch('https://api.cloudinary.com/v1_1/ufc2tjqy/image/upload', {
         method: 'POST',
         body: formData
       });
