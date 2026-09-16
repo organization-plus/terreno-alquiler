@@ -99,10 +99,10 @@
         <div class="mb-12 flex flex-wrap justify-center gap-3" id="menu-categorias"></div>
 
         <div id="grilla-productos" class="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-          <!-- Skeleton Loaders -->
-          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
-          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse hidden sm:block"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
-          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse hidden lg:block"><div class="aspect-[4/3] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+          <!-- Skeleton Loaders (AHORA EN FORMATO VERTICAL 3:4) -->
+          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse"><div class="aspect-[3/4] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse hidden sm:block"><div class="aspect-[3/4] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
+          <article class="rounded-3xl bg-white p-3 shadow-sm border border-gray-100 animate-pulse hidden lg:block"><div class="aspect-[3/4] rounded-2xl bg-gray-200"></div><div class="px-2 pb-2 pt-4"><div class="h-4 bg-gray-200 rounded w-1/2 mb-3"></div><div class="h-6 bg-gray-200 rounded w-1/3"></div></div></article>
         </div>
       </section>
     </div>
@@ -134,8 +134,8 @@
         <div class="flex flex-col gap-8">
           
           <div class="bg-white/95 backdrop-blur-sm p-3 rounded-3xl shadow-sm border border-gray-100">
-            <!-- Foto principal -->
-            <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 relative">
+            <!-- Foto principal (AHORA EN FORMATO VERTICAL 3:4) -->
+            <div class="aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100 relative">
               <img id="detalle-img-main" src="" alt="Vista principal" class="h-full w-full object-cover transition-opacity duration-300">
             </div>
             <!-- Miniaturas deslizables -->
@@ -223,7 +223,6 @@
       
       renderizarMenu(); filtrar('todo'); 
       
-      // Llamamos a la animación de la cortina
       quitarSplashScreen();
     }
 
@@ -233,18 +232,12 @@
       const curtainBottom = document.getElementById('curtain-bottom');
       const splashScreen = document.getElementById('splash-screen');
 
-      // 1. El logo se desvanece suavemente
-      setTimeout(() => {
-        logo.classList.add('opacity-0', 'scale-90');
-      }, 600);
-
-      // 2. Las cortinas se abren
+      setTimeout(() => { logo.classList.add('opacity-0', 'scale-90'); }, 600);
       setTimeout(() => {
         curtainTop.classList.add('-translate-y-full');
         curtainBottom.classList.add('translate-y-full');
       }, 1100);
 
-      // 3. Destruir el contenedor y mostrar anuncio si lo hay
       setTimeout(() => {
         splashScreen.style.display = 'none';
         cargarAnuncio(); 
@@ -332,8 +325,9 @@
         const atributosImagen = index < 6 ? 'fetchpriority="high"' : 'loading="lazy"';
         const indicadorGaleria = (prod.galeria && prod.galeria.length > 0) ? `<div class="absolute top-3 right-3 rounded-full bg-white/95 px-3 py-1.5 text-[10px] font-bold text-black shadow-sm flex items-center gap-1"><i class="fa-solid fa-images"></i> +${prod.galeria.length}</div>` : '';
 
+        // AHORA LAS CAJAS SON VERTICALES aspect-[3/4]
         tarjeta.innerHTML = `
-          <div class="aspect-[4/3] overflow-hidden rounded-2xl bg-gray-100 relative">
+          <div class="aspect-[3/4] overflow-hidden rounded-2xl bg-gray-100 relative">
             <img src="${prod.imagen}" ${atributosImagen} alt="${prod.nombre}" class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
             ${indicadorGaleria}
           </div>
