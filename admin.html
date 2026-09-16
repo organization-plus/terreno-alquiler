@@ -30,7 +30,6 @@
 
 <body class="bg-gray-50 text-gray-900 font-sans min-h-screen flex flex-col antialiased">
 
-  <!-- PANTALLA DE LOGIN (Minimalista) -->
   <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gray-50 p-4 z-50">
     <div class="bg-white p-10 rounded-3xl shadow-xl border border-gray-100 w-full max-w-sm text-center">
       <h2 class="text-3xl font-bold mb-8 tracking-tight text-black">Acceso Admin</h2>
@@ -45,23 +44,18 @@
     </div>
   </div>
 
-  <!-- PANTALLA PRINCIPAL DEL ADMIN -->
   <div id="admin-screen" class="hidden flex-col min-h-screen">
     <nav class="bg-white py-4 px-6 md:px-12 flex flex-wrap justify-between items-center border-b border-gray-200 sticky top-0 z-40 gap-4 shadow-sm">
       <div class="text-xl font-bold tracking-tight">
         Hasan y asociados <span class="font-light text-gray-500">Admin</span>
       </div>
       <div class="flex flex-wrap gap-2 md:gap-3">
-        <button onclick="abrirModalAnuncio()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold py-2 px-4 rounded-full transition flex items-center gap-2">
-          <i class="fa-solid fa-bullhorn"></i> <span class="hidden sm:inline">Anuncio</span>
-        </button>
         <button onclick="abrirModalCategorias()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold py-2 px-4 rounded-full transition flex items-center gap-2">
           <i class="fa-solid fa-tags"></i> <span class="hidden sm:inline">Categorías</span>
         </button>
         <button onclick="abrirModalNuevo()" class="bg-black hover:bg-gray-800 text-white text-xs font-semibold py-2 px-4 rounded-full transition shadow-md flex items-center gap-2">
           <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Nueva Propiedad</span>
         </button>
-        <!-- BOTÓN DE CERRAR SESIÓN -->
         <button onclick="cerrarSesion()" class="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold py-2 px-4 rounded-full transition shadow-sm border border-red-100 flex items-center gap-2 ml-2" title="Cerrar sesión">
           <i class="fa-solid fa-right-from-bracket"></i>
         </button>
@@ -75,7 +69,6 @@
     </main>
   </div>
 
-  <!-- Modal Nueva Propiedad -->
   <div id="modal-form" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity overflow-y-auto py-10">
     <div class="bg-white rounded-2xl max-w-xl w-full p-8 shadow-2xl relative my-auto">
       <button onclick="cerrarModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
@@ -135,7 +128,6 @@
     </div>
   </div>
 
-  <!-- Modal Gestor de Categorías -->
   <div id="modal-categorias" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity">
     <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl relative border border-gray-100">
       <button onclick="cerrarModalCategorias()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
@@ -150,42 +142,9 @@
     </div>
   </div>
 
-  <!-- Modal Anuncios -->
-  <div id="modal-anuncio" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50 transition-opacity overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-lg w-full p-8 shadow-2xl relative border border-gray-100">
-      <button onclick="cerrarModalAnuncio()" class="absolute top-4 right-4 text-gray-400 hover:text-black transition bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
-      <h3 class="text-2xl font-bold mb-6"><i class="fa-solid fa-bullhorn text-gray-400"></i> Anuncio Emergente</h3>
-      
-      <form id="form-anuncio" class="flex flex-col gap-4">
-        <label class="flex items-center gap-3 bg-gray-50 p-4 rounded-xl border border-gray-200 cursor-pointer hover:border-black transition">
-          <input type="checkbox" id="anuncio-activo" class="w-5 h-5 accent-black">
-          <span class="text-sm font-bold text-gray-800">Mostrar este anuncio al entrar</span>
-        </label>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Título</label>
-          <input type="text" id="anuncio-titulo" class="w-full bg-gray-50 border border-gray-200 text-black p-3 rounded-xl focus:border-black outline-none transition">
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">Mensaje</label>
-          <textarea id="anuncio-texto" rows="4" class="w-full bg-gray-50 border border-gray-200 text-black p-3 rounded-xl focus:border-black outline-none transition break-words whitespace-pre-wrap"></textarea>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
-          <label class="block text-sm font-bold text-gray-800 uppercase tracking-wide mb-2"><i class="fa-solid fa-image"></i> Imagen de Fondo (Textura)</label>
-          <input type="file" id="anuncio-imagen" accept="image/*" class="w-full text-xs text-gray-500 file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:bg-gray-200 file:text-black">
-          <div id="preview-anuncio-bg" class="mt-3 hidden">
-            <div class="w-full h-24 rounded-lg overflow-hidden border border-gray-300 relative">
-              <img id="img-anuncio-actual" src="" class="w-full h-full object-cover opacity-50">
-            </div>
-          </div>
-        </div>
-        <button type="submit" id="btn-guardar-anuncio" class="bg-black hover:bg-gray-800 text-white font-bold py-4 rounded-xl mt-2 transition shadow-md">Publicar Anuncio</button>
-      </form>
-    </div>
-  </div>
-
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"; 
 
     const firebaseConfig = {
@@ -206,7 +165,6 @@
     let categorias = [];
     let urlImagenActual = ""; 
     let galeriaActual = []; 
-    let urlAnuncioActual = "";
     let mapaAdmin = null;
     let markerAdmin = null;
     let coordsGuardadas = null;
@@ -373,7 +331,6 @@
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            // VOLVIMOS AL MOTOR VERTICAL DE MANDALAS (3:4)
             const anchoObjetivo = 600;
             const altoObjetivo = 800;
             canvas.width = anchoObjetivo;
@@ -418,7 +375,7 @@
 
       const data = await response.json();
       if (data.secure_url) { return data.secure_url; } 
-      else { throw new Error('Cloudinary rechazó la imagen. Revisá haber creado el upload_preset "estudio-juridico".'); }
+      else { throw new Error('Cloudinary rechazó la imagen.'); }
     }
 
     window.abrirModalNuevo = function() {
@@ -519,43 +476,6 @@
         if (id) { await updateDoc(doc(db, "inmuebles", id), datosProducto); } else { await addDoc(collection(db, "inmuebles"), datosProducto); }
         cerrarModal(); cargarProductos(); 
       } catch (error) { alert("Error: " + error.message); } finally { boton.innerHTML = originalText; boton.disabled = false; }
-    });
-
-    window.abrirModalAnuncio = async function() {
-      document.getElementById("modal-anuncio").classList.remove("hidden");
-      document.getElementById("modal-anuncio").classList.add("flex");
-      try {
-        const docSnap = await getDoc(doc(db, "configuracion_inmuebles", "anuncio"));
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          document.getElementById('anuncio-activo').checked = data.activo || false;
-          document.getElementById('anuncio-titulo').value = data.titulo || "";
-          document.getElementById('anuncio-texto').value = data.texto || "";
-          urlAnuncioActual = data.imagen || "";
-          if(urlAnuncioActual) {
-            document.getElementById('preview-anuncio-bg').classList.remove('hidden');
-            document.getElementById('img-anuncio-actual').src = urlAnuncioActual;
-          }
-        }
-      } catch(e) {}
-    }
-    window.cerrarModalAnuncio = function() { document.getElementById("modal-anuncio").classList.add("hidden"); document.getElementById("modal-anuncio").classList.remove("flex"); }
-
-    document.getElementById('form-anuncio').addEventListener('submit', async (e) => {
-      e.preventDefault(); const boton = document.getElementById('btn-guardar-anuncio'); const originalText = boton.innerHTML; boton.disabled = true;
-      try {
-        const archivoFoto = document.getElementById('anuncio-imagen').files[0]; let urlFinal = urlAnuncioActual; 
-        if (archivoFoto) {
-          boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Subiendo fondo...';
-          const fotoComprimida = await comprimirImagen(archivoFoto); 
-          urlFinal = await subirACloudinary(fotoComprimida);
-        }
-        boton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
-        await setDoc(doc(db, "configuracion_inmuebles", "anuncio"), {
-          activo: document.getElementById('anuncio-activo').checked, titulo: document.getElementById('anuncio-titulo').value, texto: document.getElementById('anuncio-texto').value, imagen: urlFinal
-        });
-        cerrarModalAnuncio(); alert("Anuncio actualizado.");
-      } catch (error) {} finally { boton.innerHTML = originalText; boton.disabled = false; }
     });
   </script>
 </body>
