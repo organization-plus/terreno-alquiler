@@ -47,7 +47,7 @@
   <div id="admin-screen" class="hidden flex-col min-h-screen">
     <nav class="bg-white py-4 px-6 md:px-12 flex flex-wrap justify-between items-center border-b border-gray-200 sticky top-0 z-40 gap-4 shadow-sm">
       <div class="text-xl font-bold tracking-tight">
-        Hasan y asociados <span class="font-light text-gray-500">Admin</span>
+        Hasan y Asociados <span class="font-light text-gray-500">Admin</span>
       </div>
       <div class="flex flex-wrap gap-2 md:gap-3">
         <button onclick="abrirModalCategorias()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold py-2 px-4 rounded-full transition flex items-center gap-2">
@@ -375,7 +375,7 @@
 
       const data = await response.json();
       if (data.secure_url) { return data.secure_url; } 
-      else { throw new Error('Cloudinary rechazó la imagen.'); }
+      else { throw new Error('Cloudinary rechazó la imagen. Revisá haber creado el upload_preset "estudio-juridico".'); }
     }
 
     window.abrirModalNuevo = function() {
